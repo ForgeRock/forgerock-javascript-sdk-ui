@@ -25,8 +25,16 @@
     "e2e_server": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
     "e2e_tests": "ts-node e2e/index.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ForgeRock/forgerock-javascript-sdk-ui.git"
+  },
   "author": "ForgeRock",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui/issues"
+  },
+  "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
     "@forgerock/javascript-sdk": "^1.0.0"
   },
