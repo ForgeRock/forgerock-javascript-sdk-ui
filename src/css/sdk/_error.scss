@@ -1,0 +1,9 @@
+.fr-error {
+  animation-name: fadein;
+  animation-duration: 0.3s;
+  margin: 1.25em 0;
+
+  > li {
+    color: #eb5757;
+  }
+}

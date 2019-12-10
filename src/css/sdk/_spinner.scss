@@ -1,0 +1,30 @@
+.fr-spinner,
+.fr-spinner:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+
+.fr-spinner {
+  margin: 0 auto;
+  font-size: 10px;
+  position: relative;
+  border-top: 0.5em solid #e7eef4;
+  border-right: 0.5em solid #e7eef4;
+  border-bottom: 0.5em solid #e7eef4;
+  border-left: 0.5em solid #2d9ee0;
+  animation: load 0.75s infinite linear;
+
+  & + h2 {
+    margin-top: 1.75em !important;
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
