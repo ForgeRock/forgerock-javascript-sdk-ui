@@ -1,0 +1,53 @@
+{
+  "name": "forgerock-javascript-sdk-ui",
+  "version": "1.0.0",
+  "description": "ForgeRock JavaScript SDK with UI rendering capability",
+  "main": "./lib/",
+  "module": "./lib-esm/",
+  "files": [
+    "/bundles/**/*",
+    "/lib/**/*",
+    "/lib-esm/**/*",
+    "package.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack --env.DEV=no",
+    "clean": "shx rm -rf bundles lib lib-esm",
+    "start": "webpack --env.DEV=yes",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "make_certs": "sh ./create_certs.sh",
+    "trust_cert_ca": "security add-trusted-cert -d -r trustRoot -k '/Library/Keychains/System.keychain' certs/ca.crt",
+    "trust_cert_site": "security add-trusted-cert -d -r trustAsRoot -k '/Library/Keychains/System.keychain' certs/samples.crt",
+    "trust_certs": "npm run trust_cert_ca && npm run trust_cert_site",
+    "untrust_cert": "security delete-certificate -c forgerock-sdk-samples.com",
+    "samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "e2e_server": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "e2e_tests": "ts-node e2e/index.ts"
+  },
+  "author": "ForgeRock",
+  "license": "MIT",
+  "dependencies": {
+    "@forgerock/javascript-sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@forgerock/ui-design": "^0.1.1",
+    "awesome-typescript-loader": "^5.2.1",
+    "bootstrap": "^4.4.1",
+    "copyfiles": "^2.1.1",
+    "cpy-cli": "^2.0.0",
+    "file-loader": "^5.0.2",
+    "http-server": "^0.11.1",
+    "node-sass": "^4.13.0",
+    "raw-loader": "^3.1.0",
+    "sass-loader": "^8.0.0",
+    "shx": "^0.3.2",
+    "tslint": "^5.20.0",
+    "tslint-webpack-plugin": "^2.1.0",
+    "typedoc": "^0.15.1",
+    "typedoc-webpack-plugin": "^1.1.4",
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}

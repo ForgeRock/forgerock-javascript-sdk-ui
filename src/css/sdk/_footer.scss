@@ -1,0 +1,21 @@
+.fr-footer {
+  margin-top: 2em;
+
+  & > nav > ul {
+    padding: 0;
+    margin: 0;
+
+    & > li {
+      display: inline;
+
+      &:not(:last-child):after {
+        color: #98a1ae;
+        content: '●';
+        font-size: 0.188em;
+        line-height: 1em;
+        margin: 0 0.625rem 0 0.875rem;
+        vertical-align: middle;
+      }
+    }
+  }
+}
