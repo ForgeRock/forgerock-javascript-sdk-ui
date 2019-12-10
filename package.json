@@ -1,5 +1,5 @@
 {
-  "name": "forgerock-javascript-sdk-ui",
+  "name": "@forgerock/javascript-sdk-ui",
   "version": "1.0.0",
   "description": "ForgeRock JavaScript SDK with UI rendering capability",
   "main": "./lib/",
