@@ -1,25 +1,47 @@
 import { FRCallback, PolicyRequirement } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
-import { CallbackRenderer } from '../interfaces';
+import {
+  CallbackRenderer,
+  DestroyableCallbackRenderer,
+  FocusableCallbackRenderer,
+} from '../interfaces';
 import { renderErrors } from './errors';
 
-class GenericCallbackRenderer implements CallbackRenderer {
+/**
+ * Renders a labeled text input box and any policy failure messages.
+ */
+class GenericCallbackRenderer implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private input!: HTMLInputElement;
 
+  /**
+   * @param callback The callback to render
+   * @param index The index position in the step's callback array
+   * @param onChange A function to call when the callback value is changed
+   */
   constructor(
     private callback: FRCallback,
     private index: number,
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
 
-  public destroy = () => {
-    this.input.removeEventListener('keyup', this.onInput);
-  };
+  /**
+   * Removes event listeners.
+   */
+  public destroy = () => this.input.removeEventListener('keyup', this.onInput);
 
+  /**
+   * Sets the focus on the text input.
+   */
   public focus = () => this.input.focus();
 
+  /**
+   * Returns true if the text input has a value.
+   */
   public isValid = () => this.input && this.input.value.length > 0;
 
+  /**
+   * Creates all required DOM elements and returns the containing element.
+   */
   public render = () => {
     // Create basic structure
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);

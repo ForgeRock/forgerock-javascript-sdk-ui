@@ -31,13 +31,34 @@ import ReCaptchaCallbackRenderer from '../renderers/recaptcha';
 import TermsAndConditionsCallbackRenderer from '../renderers/terms';
 import template from '../views/form.html';
 
+/**
+ * Handler that creates generic renderers for each supported callback.  This is the default
+ * when creating a new `FRUI` instance.
+ */
 class BasicStepHandler implements FRUIStepHandler {
   private submit?: HTMLButtonElement;
   private container: HTMLDivElement;
   private renderers!: CallbackRenderer[];
 
+  private callbacksThatDontRequireSubmitButton = [
+    CallbackType.ConfirmationCallback,
+    CallbackType.PollingWaitCallback,
+    // TODO: Update when core SDK supports this callback type
+    'RedirectCallback',
+  ];
+
+  /**
+   * The deferred Promise that resolves the step when it's ready to submit.
+   */
   protected deferred: Deferred<FRStep>;
 
+  /**
+   * Creates a new BasicStepHandler object.
+   *
+   * @param target The HTML element to render callbacks into
+   * @param step The step that contains callbacks to render
+   * @param rendererFactory A factory to override rendering of specific callbacks
+   */
   constructor(
     private target: HTMLElement,
     private step: FRStep,
@@ -48,14 +69,11 @@ class BasicStepHandler implements FRUIStepHandler {
     this.deferred = new Deferred<FRStep>();
   }
 
-  private callbacksThatDontRequireSubmitButton = [
-    CallbackType.ConfirmationCallback,
-    CallbackType.PollingWaitCallback,
-    // TODO: Update when core SDK supports this callback type
-    'RedirectCallback',
-  ];
-
-  public completeStep = (step: FRStep) => {
+  /**
+   * Renders all callbacks in the step and returns a Promise that is resolved when the step is
+   * ready to be submitted.
+   */
+  public completeStep = (): Promise<FRStep> => {
     // Start with the HTML template
     this.target.innerHTML = '';
     this.container = el('div');
@@ -77,7 +95,7 @@ class BasicStepHandler implements FRUIStepHandler {
     }
 
     // Render callbacks
-    this.renderers = this.createRenderers(step);
+    this.renderers = this.createRenderers();
     this.renderers.forEach((x) => {
       formTarget.appendChild(x.render());
     });
@@ -97,8 +115,6 @@ class BasicStepHandler implements FRUIStepHandler {
     return this.deferred.promise;
   };
 
-  public retry?: () => Promise<FRStep>;
-
   private setHeader = () => {
     const h1 = this.container.querySelector('h1');
     if (h1) {
@@ -106,14 +122,14 @@ class BasicStepHandler implements FRUIStepHandler {
     }
   };
 
-  private createRenderers = (step: FRStep) => {
-    const renderers = step.callbacks.map((x, i) => this.createRenderer(x, i, step));
+  private createRenderers = () => {
+    const renderers = this.step.callbacks.map(this.createRenderer);
     return renderers;
   };
 
-  private createRenderer = (cb: FRCallback, index: number, step: FRStep) => {
+  private createRenderer = (cb: FRCallback, index: number) => {
     if (this.rendererFactory) {
-      const renderer = this.rendererFactory(cb, index, step, this.onChange);
+      const renderer = this.rendererFactory(cb, index, this.step, this.onChange);
       if (renderer) return renderer;
     }
 
@@ -145,7 +161,7 @@ class BasicStepHandler implements FRUIStepHandler {
 
       case CallbackType.KbaCreateCallback:
         const kbaCreateCallback = cb as KbaCreateCallback;
-        const kbaIndex = step
+        const kbaIndex = this.step
           .getCallbacksOfType<KbaCreateCallback>(CallbackType.KbaCreateCallback)
           .filter((x) => x.getPrompt() === kbaCreateCallback.getPrompt())
           .indexOf(kbaCreateCallback);
