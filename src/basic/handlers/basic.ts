@@ -88,12 +88,6 @@ class BasicStepHandler implements FRUIStepHandler {
 
     this.setHeader();
 
-    // Add the submit button if necessary
-    if (this.requiresSubmitButton()) {
-      this.submit = this.createSubmitButton();
-      buttonTarget.appendChild(this.submit);
-    }
-
     // Render callbacks
     this.renderers = this.createRenderers();
     this.renderers.forEach((x) => {
@@ -111,6 +105,12 @@ class BasicStepHandler implements FRUIStepHandler {
 
     // Notify renderers to perform any post-injection actions
     this.renderers.filter((x) => !!x.onInjected).forEach((x) => x.onInjected && x.onInjected());
+
+    // Add the submit button if necessary
+    if (this.requiresSubmitButton()) {
+      this.submit = this.createSubmitButton();
+      buttonTarget.appendChild(this.submit);
+    }
 
     return this.deferred.promise;
   };
@@ -173,14 +173,14 @@ class BasicStepHandler implements FRUIStepHandler {
   };
 
   private onChange = () => {
-    const isInvalid = (x: CallbackRenderer) => {
-      return x.isValid !== undefined && !x.isValid();
-    };
-    const someInvalid = this.renderers.some(isInvalid);
+    const isValid = this.isValid();
+    this.setSubmitButton(isValid);
 
-    if (this.submit) {
-      this.submit.disabled = someInvalid;
-    } else if (!someInvalid) {
+    /**
+     * Automatically resolve if there's no submit button and a callback change occurs.
+     * This is expected for callbacks like polling wait.
+     */
+    if (!this.submit && isValid) {
       this.resolve();
     }
   };
@@ -194,10 +194,21 @@ class BasicStepHandler implements FRUIStepHandler {
 
   private createSubmitButton = () => {
     const button = el<HTMLButtonElement>('button', 'btn btn-primary');
-    button.disabled = true;
+    button.disabled = !this.isValid();
     button.innerText = 'Next';
     button.addEventListener('click', this.resolve);
     return button;
+  };
+
+  private isValid = () => {
+    const isInvalid = (x: CallbackRenderer) => x.isValid !== undefined && !x.isValid();
+    return !this.renderers.some(isInvalid);
+  };
+
+  private setSubmitButton = (isValid?: boolean) => {
+    if (this.submit) {
+      this.submit.disabled = isValid !== undefined ? !isValid : !this.isValid();
+    }
   };
 
   private resolve = () => {
