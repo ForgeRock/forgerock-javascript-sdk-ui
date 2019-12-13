@@ -40,7 +40,9 @@
     "url": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui/issues"
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@forgerock/javascript-sdk": "^1.0.0"
+  },
   "devDependencies": {
     "@forgerock/ui-design": "^0.1.1",
     "awesome-typescript-loader": "^5.2.1",
