@@ -15,15 +15,20 @@
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack --env.DEV=no",
     "clean": "shx rm -rf bundles lib lib-esm",
     "start": "webpack --env.DEV=yes",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "make_certs": "sh ./create_certs.sh",
-    "trust_cert_ca": "security add-trusted-cert -d -r trustRoot -k '/Library/Keychains/System.keychain' certs/ca.crt",
-    "trust_cert_site": "security add-trusted-cert -d -r trustAsRoot -k '/Library/Keychains/System.keychain' certs/samples.crt",
-    "trust_certs": "npm run trust_cert_ca && npm run trust_cert_site",
-    "untrust_cert": "security delete-certificate -c forgerock-sdk-samples.com",
-    "samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
-    "e2e_server": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
-    "e2e_tests": "ts-node e2e/index.ts"
+    "test": "jest",
+    "docs": "npm run docs:clean && npm run docs:gen",
+    "docs:gen": "typedoc --mode file ./src",
+    "docs:clean": "shx rm -rf docs",
+    "docs:watch": "watch 'npm run docs' ./src",
+    "lint": "eslint --ignore-path .gitignore '**/*.ts' --fix",
+    "certs:make": "sh ./create_certs.sh",
+    "certs:trust:ca": "security add-trusted-cert -d -r trustRoot -k '/Library/Keychains/System.keychain' certs/ca.crt",
+    "certs:trust:site": "security add-trusted-cert -d -r trustAsRoot -k '/Library/Keychains/System.keychain' certs/samples.crt",
+    "certs:trust:all": "npm run certs:trust:ca && npm run certs:trust:site",
+    "certs:untrust": "security delete-certificate -c forgerock-sdk-samples.com",
+    "server:e2e": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "server:samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "test:e2e": "ts-node e2e/index.ts"
   },
   "repository": {
     "type": "git",
@@ -55,6 +60,7 @@
     "typedoc": "^0.15.1",
     "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^3.6.3",
+    "watch": "^1.0.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }

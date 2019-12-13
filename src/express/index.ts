@@ -9,6 +9,12 @@ import RegistrationUserInfoStepHandler from './handlers/registration-user-info';
 import UsernameStepHandler from './handlers/username';
 import UsernamePasswordStepHandler from './handlers/username-password';
 
+/**
+ * A factory for creating a step handler for the provided Express step.
+ *
+ * @param target The DOM element in which to render the step
+ * @param step The step to render
+ */
 const expressStepHandlerFactory: FRUIStepHandlerFactory = (target: HTMLElement, step: FRStep) => {
   if (!step) {
     throw new Error('Cannot create handler; no step specified');

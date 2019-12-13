@@ -1,26 +1,48 @@
 import { TermsAndConditionsCallback } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
-import { CallbackRenderer } from '../interfaces';
+import {
+  CallbackRenderer,
+  DestroyableCallbackRenderer,
+  FocusableCallbackRenderer,
+} from '../interfaces';
 
-class TermsAndConditionsCallbackRenderer implements CallbackRenderer {
+/**
+ * Renders the content of the Terms and Conditions, along with a labeled checkbox
+ * that indicates agreement.
+ */
+class TermsAndConditionsCallbackRenderer
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private input!: HTMLInputElement;
 
+  /**
+   * @param callback The callback to render
+   * @param index The index position in the step's callback array
+   * @param onChange A function to call when the callback value is changed
+   */
   constructor(
     private callback: TermsAndConditionsCallback,
     private index: number,
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
 
-  public destroy = () => {
-    this.input.removeEventListener('change', this.onInput);
-  };
+  /**
+   * Removes event listeners.
+   */
+  public destroy = () => this.input.removeEventListener('change', this.onInput);
 
-  public focus = () => {
-    this.input.focus();
-  };
+  /**
+   * Sets the focus on the checkbox.
+   */
+  public focus = () => this.input.focus();
 
+  /**
+   * Returns true if the checkbox is checked.
+   */
   public isValid = () => this.input && this.input.checked;
 
+  /**
+   * Creates all required DOM elements and returns the containing element.
+   */
   public render = () => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
 

@@ -1,30 +1,51 @@
 import { ConfirmationCallback } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
-import { CallbackRenderer } from '../interfaces';
+import {
+  CallbackRenderer,
+  DestroyableCallbackRenderer,
+  FocusableCallbackRenderer,
+} from '../interfaces';
 
+/** @hidden */
 interface ConfirmationButton {
   element: HTMLButtonElement;
   handler: (e: MouseEvent) => void;
 }
 
-class ConfirmationCallbackRenderer implements CallbackRenderer {
+/**
+ * Renders a message and a set of buttons, one for each option in the callback.
+ */
+class ConfirmationCallbackRenderer
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private buttons!: ConfirmationButton[];
 
+  /**
+   * @param callback The callback to render
+   * @param index The index position in the step's callback array
+   * @param onChange A function to call when the callback value is changed
+   */
   constructor(
     private callback: ConfirmationCallback,
     private index: number,
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
 
+  /**
+   * Removes event listeners.
+   */
   public destroy = () => {
     this.buttons.forEach((x) => x.element.removeEventListener('click', x.handler));
     this.buttons = [];
   };
 
-  public focus = () => {
-    this.buttons[0].element.focus();
-  };
+  /**
+   * Sets the focus on the first button.
+   */
+  public focus = () => this.buttons[0].element.focus();
 
+  /**
+   * Creates all required DOM elements and returns the containing element.
+   */
   public render = () => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
     const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group');

@@ -6,15 +6,26 @@ import deviceRegistrationTemplate from '../views/device-registration-choice.html
 import passwordlessTemplate from '../views/passwordless-choice.html';
 import secondFactorTemplate from '../views/second-factor-choice.html';
 
+/** @hidden */
 const ATTR_NAME = 'data-choice';
 
+/** @hidden */
 interface IconText {
   icon: string;
   text: string;
 }
 
+/**
+ * Handler that renders the three different uses of a choice collector in Express:
+ * - Prompt to register a security device
+ * - Prompt to "go passwordless"
+ * - Prompt to select method to receive second factor
+ */
 class ChoiceStepHandler extends FRStepHandlerBase {
-  public bind = () => {
+  /** @hidden */
+  public retry = undefined;
+
+  protected bind = () => {
     this.target.addEventListener('click', this.onClick);
   };
 
@@ -88,7 +99,7 @@ class ChoiceStepHandler extends FRStepHandlerBase {
         case 'SMS':
           return { icon, text: `${twoChoices ? 'Receive a text' : 'Text a code'}` };
         default:
-          throw new Error(`Unsupposed choice "${choice}"`);
+          throw new Error(`Unsupported choice "${choice}"`);
       }
     });
   }

@@ -6,11 +6,23 @@ import {
   FRStep,
   StepType,
 } from '@forgerock/javascript-sdk';
+import { ConfigOptions } from 'index';
 import basicStepHandlerFactory from './basic';
 import { TARGET_ID } from './constants';
 import { FREventType } from './enums';
 import { FREndStep, FRUIOptions, FRUIStepHandler } from './interfaces';
 
+/**
+ * Orchestrates the flow through an authentication tree using `FRAuth`, generating
+ * a handler for each step using the default or provided handler factory.
+ *
+ * Example:
+ *
+ * ```js
+ * const ui = new forgerock.FRUI();
+ * const result = await ui.getSession();
+ * ```
+ */
 class FRUI extends Dispatcher {
   private el: HTMLElement;
   private options: FRUIOptions = {
@@ -39,18 +51,26 @@ class FRUI extends Dispatcher {
     this.el = el;
   }
 
-  public getSession = async (): Promise<FREndStep> => {
+  /**
+   * Completes an authentication tree and returns the success or failure response.
+   *
+   * @param options Default configuration overrides
+   */
+  public getSession = async (options?: ConfigOptions): Promise<FREndStep> => {
     this.successfulStages = [];
-    return this.nextStep();
+    return this.nextStep(undefined, options);
   };
 
-  public clearState = () => {
+  /**
+   * Reserved for future use.  Returns the current instance of FRUI for chaining.
+   */
+  public clearState = (): FRUI => {
     return this;
   };
 
-  private async nextStep(previousStep?: FRStep): Promise<FREndStep> {
+  private async nextStep(previousStep?: FRStep, options?: ConfigOptions): Promise<FREndStep> {
     try {
-      let thisStep = await FRAuth.next(previousStep);
+      let thisStep = await FRAuth.next(previousStep, options);
 
       this.dispatchEvent({ step: thisStep, type: FREventType.StepChange });
 
@@ -85,7 +105,7 @@ class FRUI extends Dispatcher {
           if (!this.handler) {
             throw new Error('Handler factory failed to produce a handler');
           }
-          thisStep = await this.handler.completeStep(thisStep);
+          thisStep = await this.handler.completeStep();
 
           // Keep going to the next step
           return this.nextStep(thisStep);
