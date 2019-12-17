@@ -5,9 +5,11 @@ coverage/
 lib/
 lib-esm/
 node_modules/
-samples/js/fr-*.js*
+e2e/site/fr-sdk-ui.js*
+e2e/site/index.js.map
+e2e/site/server.js
+samples/js/fr-sdk-ui.js*
 samples/css/fr-*.css
-tests/e2e/test-site/index.js
 
 .DS_Store
 .env

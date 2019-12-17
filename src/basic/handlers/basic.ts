@@ -195,6 +195,7 @@ class BasicStepHandler implements FRUIStepHandler {
   private createSubmitButton = () => {
     const button = el<HTMLButtonElement>('button', 'btn btn-primary');
     button.disabled = !this.isValid();
+    button.id = 'fr-submit';
     button.innerText = 'Next';
     button.addEventListener('click', this.resolve);
     return button;
