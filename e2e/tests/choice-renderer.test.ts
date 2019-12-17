@@ -1,18 +1,23 @@
+import { CallbackType, ChoiceCallback, FRStep } from '@forgerock/javascript-sdk';
 import data from '../server/data';
-import { getAttribute, getInnerHtml, isSubmitEnabled, setTree } from './helpers';
+import { getInnerHtml, getValue, isSubmitEnabled, setTree } from './helpers';
 
 describe('ChoiceCallbackRenderer', () => {
   it('works correctly', async () => {
     try {
+      const step = new FRStep(data.ChoiceCallbackRendererTest);
+      const callback = step.getCallbackOfType<ChoiceCallback>(CallbackType.ChoiceCallback);
+      const expectedLabel = callback.getPrompt();
+      const expectedSelected = callback.getDefaultChoice();
+
       await setTree('ChoiceCallbackRendererTest');
-      const actualSelected = await getAttribute('#fr-callback-0', 'value');
+
       const actualLabel = await getInnerHtml('label');
+      const actualSelected = await getValue('#fr-callback-0');
       const actualSubmitEnabled = await isSubmitEnabled();
-      const callback = data.ChoiceCallbackRendererTest.callbacks[0];
-      const expectedLabel = callback.output[0].value;
-      const expectedSelected = callback.output[2].value;
-      expect(parseInt(actualSelected as string)).toBe(expectedSelected);
+
       expect(actualLabel).toBe(expectedLabel);
+      expect(parseInt(actualSelected as string)).toBe(expectedSelected);
       expect(actualSubmitEnabled).toBe(true);
     } catch (error) {
       fail(error);

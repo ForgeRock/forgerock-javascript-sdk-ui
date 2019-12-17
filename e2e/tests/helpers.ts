@@ -11,16 +11,21 @@ async function setTree(tree: string) {
   await page.goto(url.toString());
 }
 
-async function getAttribute(selector: string, property: string): Promise<unknown> {
+async function getProperty<T>(selector: string, property: string): Promise<T> {
   const element = await page.waitForSelector(selector);
   const propertyHandle = await element.getProperty(property);
   const propertyValue = await propertyHandle.jsonValue();
-  return propertyValue;
+  return propertyValue as T;
 }
 
-async function getInnerHtml(selector: string): Promise<unknown> {
-  const innerHtml = await getAttribute(selector, 'innerHTML');
+async function getInnerHtml(selector: string): Promise<string> {
+  const innerHtml = await getProperty<string>(selector, 'innerHTML');
   return innerHtml;
+}
+
+async function getValue(selector: string): Promise<string> {
+  const value = await getProperty<string>(selector, 'value');
+  return value;
 }
 
 async function isSubmitEnabled(): Promise<boolean> {
@@ -33,4 +38,4 @@ async function isSubmitEnabled(): Promise<boolean> {
   return !propertyValue;
 }
 
-export { getAttribute, getInnerHtml, isSubmitEnabled, setTree };
+export { getProperty, getInnerHtml, getValue, isSubmitEnabled, setTree };
