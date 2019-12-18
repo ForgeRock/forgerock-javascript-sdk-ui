@@ -33,7 +33,7 @@ class ConfirmationCallbackRenderer
   /**
    * Removes event listeners.
    */
-  public destroy = () => {
+  public destroy = (): void => {
     this.buttons.forEach((x) => x.element.removeEventListener('click', x.handler));
     this.buttons = [];
   };
@@ -41,12 +41,12 @@ class ConfirmationCallbackRenderer
   /**
    * Sets the focus on the first button.
    */
-  public focus = () => this.buttons[0].element.focus();
+  public focus = (): void => this.buttons[0].element.focus();
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
     const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group');
 
@@ -61,7 +61,7 @@ class ConfirmationCallbackRenderer
     // Add the buttons
     const defaultOption = this.callback.getDefaultOption();
     this.buttons = this.callback.getOptions().map((x, i) => {
-      const handler = () => this.onInput(i);
+      const handler = (): void => this.onInput(i);
       const element = el<HTMLButtonElement>('button');
       element.className = defaultOption === i ? 'btn btn-primary' : 'btn';
       element.innerHTML = x;
@@ -73,7 +73,7 @@ class ConfirmationCallbackRenderer
     return formGroup;
   };
 
-  private onInput = (index: number) => {
+  private onInput = (index: number): void => {
     this.callback.setInputValue(index);
     this.onChange(this);
   };

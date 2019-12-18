@@ -5,21 +5,21 @@ class Button {
     this.text = button.innerHTML;
   }
 
-  public enable = () => {
+  public enable = (): void => {
     this.button.innerHTML = this.text;
     this.button.disabled = false;
   };
 
-  public disable = (text?: string) => {
+  public disable = (text?: string): void => {
     this.button.innerHTML = text || 'Verifying...';
     this.button.disabled = true;
   };
 
-  public bind = (onClick: OnClick) => {
+  public bind = (onClick: OnClick): void => {
     this.button.addEventListener('click', onClick);
   };
 
-  public unbind = (onClick: OnClick) => {
+  public unbind = (onClick: OnClick): void => {
     this.button.removeEventListener('click', onClick);
   };
 }

@@ -23,7 +23,7 @@ class PasswordStepHandler extends FRStepHandlerBase {
   /**
    * Displays a retry message and enables the submit button.
    */
-  public retry = () => {
+  public retry = (): Promise<FRStep> => {
     this.deferred = new Deferred<FRStep>();
     this.retryMessage.style.display = 'block';
     this.submit.enable();
@@ -31,24 +31,24 @@ class PasswordStepHandler extends FRStepHandlerBase {
     return this.deferred.promise;
   };
 
-  protected bind = () => {
+  protected bind = (): void => {
     this.submit.bind(this.onSubmit);
     this.passwordInput.bind();
   };
 
-  protected unbind = () => {
+  protected unbind = (): void => {
     this.submit.unbind(this.onSubmit);
     this.passwordInput.unbind();
   };
 
-  protected getRefs = () => {
+  protected getRefs = (): void => {
     this.password = this.findElement('#fr-password');
     this.submit = new Button(this.findElement('.btn-primary'));
     this.retryMessage = this.findElement('.fr-retry');
     this.passwordInput = new PasswordInput(this.password);
   };
 
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     switch (this.step.getStage()) {
       case ExpressStage.OneTimePasswordEmail:
         return oneTimeEmailTemplate;
@@ -60,11 +60,11 @@ class PasswordStepHandler extends FRStepHandlerBase {
     throw new Error(`Unsupported password stage "${this.step.getStage()}"`);
   };
 
-  protected ready = () => {
+  protected ready = (): void => {
     this.password.focus();
   };
 
-  protected onSubmit = () => {
+  protected onSubmit = (): void => {
     this.submit.disable();
     this.step.setCallbackValue(CallbackType.PasswordCallback, this.password.value);
     this.unbind();

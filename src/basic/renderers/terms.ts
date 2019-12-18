@@ -28,22 +28,22 @@ class TermsAndConditionsCallbackRenderer
   /**
    * Removes event listeners.
    */
-  public destroy = () => this.input.removeEventListener('change', this.onInput);
+  public destroy = (): void => this.input.removeEventListener('change', this.onInput);
 
   /**
    * Sets the focus on the checkbox.
    */
-  public focus = () => this.input.focus();
+  public focus = (): void => this.input.focus();
 
   /**
    * Returns true if the checkbox is checked.
    */
-  public isValid = () => this.input && this.input.checked;
+  public isValid = (): boolean => this.input && this.input.checked;
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
 
     // Add the terms
@@ -68,7 +68,7 @@ class TermsAndConditionsCallbackRenderer
     return formGroup;
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     this.callback.setAccepted(this.input.checked);
     this.onChange(this);
   };

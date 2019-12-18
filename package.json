@@ -17,6 +17,7 @@
     "clean": "shx rm -rf bundles lib lib-esm",
     "start": "webpack --env.DEV=yes",
     "lint": "eslint --ignore-path .gitignore '**/*.ts' --fix",
+    "eslint-check": "eslint --print-config src/index.ts | eslint-config-prettier-check",
     "docs": "npm run docs:clean && npm run docs:gen",
     "docs:gen": "typedoc --mode file ./src",
     "docs:clean": "shx rm -rf docs",
@@ -28,8 +29,15 @@
     "certs:untrust": "security delete-certificate -c forgerock-sdk-samples.com",
     "server:e2e": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
     "server:samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "jest e2e/** --config=test-e2e.config.js",
     "test:unit": "jest src/** --config=test-unit.config.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc && npm run lint",
+      "pre-push": "npm test"
+    }
   },
   "repository": {
     "type": "git",
@@ -50,16 +58,23 @@
     "@types/jest": "^24.0.23",
     "@types/jest-environment-puppeteer": "^4.3.1",
     "@types/puppeteer": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
     "awesome-typescript-loader": "^5.2.1",
     "bootstrap": "^4.4.1",
     "copyfiles": "^2.1.1",
     "cpy-cli": "^2.0.0",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "file-loader": "^5.0.2",
     "http-server": "^0.11.1",
+    "husky": "^3.1.0",
     "jest": "^24.9.0",
     "jest-puppeteer": "^4.3.0",
     "miragejs": "^0.1.32",
     "node-sass": "^4.13.0",
+    "prettier": "^1.19.1",
     "puppeteer": "^2.0.0",
     "raw-loader": "^3.1.0",
     "sass-loader": "^8.0.0",

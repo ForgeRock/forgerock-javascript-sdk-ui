@@ -8,14 +8,14 @@ class LoginSuccessStepHandler extends FRStepHandlerBase {
   /** @hidden */
   public retry = undefined;
 
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     return template;
   };
 
   /**
    * Resolves the handler's Promise immediately.
    */
-  protected ready = () => this.deferred.resolve(this.step);
+  protected ready = (): void => this.deferred.resolve(this.step);
 }
 
 export default LoginSuccessStepHandler;

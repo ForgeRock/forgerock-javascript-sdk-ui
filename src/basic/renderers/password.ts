@@ -30,7 +30,7 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
   /**
    * Removes event listeners.
    */
-  public destroy = () => {
+  public destroy = (): void => {
     this.input.removeEventListener('keyup', this.onInput);
     this.toggle.removeEventListener('click', this.toggleView);
   };
@@ -38,17 +38,17 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
   /**
    * Sets the focus on the password input.
    */
-  public focus = () => this.input.focus();
+  public focus = (): void => this.input.focus();
 
   /**
    * Returns true if the password input has a value.
    */
-  public isValid = () => this.input && this.input.value.length > 0;
+  public isValid = (): boolean => this.input && this.input.value.length > 0;
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     // Create the basic structure
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
     const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group form-label-group-password');
@@ -93,16 +93,16 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
     return formGroup;
   };
 
-  private setView = (showPassword: boolean) => {
+  private setView = (showPassword: boolean): void => {
     this.input.type = showPassword ? 'text' : 'password';
     this.toggleIcon.innerHTML = showPassword ? 'visibility_off' : 'visibility';
   };
 
-  private toggleView = () => {
+  private toggleView = (): void => {
     this.setView(this.input.type === 'password');
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     this.callback.setPassword(this.input.value);
     this.onChange(this);
   };

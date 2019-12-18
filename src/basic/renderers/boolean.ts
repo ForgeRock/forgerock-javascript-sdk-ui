@@ -28,17 +28,17 @@ class BooleanAttributeCallbackRenderer
   /**
    * Removes event listeners.
    */
-  public destroy = () => this.input.removeEventListener('change', this.onInput);
+  public destroy = (): void => this.input.removeEventListener('change', this.onInput);
 
   /**
    * Sets the focus on the checkbox.
    */
-  public focus = () => this.input.focus();
+  public focus = (): void => this.input.focus();
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-check mb-3`);
 
     // Add checkbox
@@ -67,7 +67,7 @@ class BooleanAttributeCallbackRenderer
     return formGroup;
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     this.callback.setValue(this.input.checked);
     this.onChange(this);
   };

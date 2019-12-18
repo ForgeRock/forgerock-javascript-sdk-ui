@@ -1,6 +1,6 @@
 import { AM_URL, APP_URL, CLIENT_ID, REALM_PATH, REDIRECT_URI, SCOPE } from '../constants';
 
-async function setTree(tree: string) {
+async function setTree(tree: string): Promise<void> {
   const url = new URL(APP_URL);
   url.searchParams.set('amUrl', AM_URL);
   url.searchParams.set('clientId', CLIENT_ID);
@@ -8,7 +8,7 @@ async function setTree(tree: string) {
   url.searchParams.set('realmPath', REALM_PATH);
   url.searchParams.set('scope', SCOPE);
   url.searchParams.set('tree', tree);
-  await page.goto(url.toString());
+  page.goto(url.toString());
 }
 
 async function getProperty<T>(selector: string, property: string): Promise<T> {

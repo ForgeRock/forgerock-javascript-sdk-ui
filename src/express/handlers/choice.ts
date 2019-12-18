@@ -25,15 +25,15 @@ class ChoiceStepHandler extends FRStepHandlerBase {
   /** @hidden */
   public retry = undefined;
 
-  protected bind = () => {
+  protected bind = (): void => {
     this.target.addEventListener('click', this.onClick);
   };
 
-  protected unbind = () => {
+  protected unbind = (): void => {
     this.target.removeEventListener('click', this.onClick);
   };
 
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     switch (this.step.getStage()) {
       case ExpressStage.DeviceRegistrationChoice:
         return deviceRegistrationTemplate;
@@ -45,7 +45,7 @@ class ChoiceStepHandler extends FRStepHandlerBase {
     throw new Error(`Unsupported choice type "${this.step.getStage()}"`);
   };
 
-  private onClick = (e: MouseEvent) => {
+  private onClick = (e: MouseEvent): void => {
     const attributeValue = (e.srcElement as HTMLElement).getAttribute(ATTR_NAME);
     if (attributeValue === null) {
       return;
@@ -58,7 +58,7 @@ class ChoiceStepHandler extends FRStepHandlerBase {
     this.deferred.resolve(this.step);
   };
 
-  private renderSecondFactorChoiceTemplate = (template: string) => {
+  private renderSecondFactorChoiceTemplate = (template: string): string => {
     const callback = this.getCallback();
     const choices = callback.getChoices();
     const model = this.updateChoiceStrings(choices);
@@ -71,23 +71,23 @@ class ChoiceStepHandler extends FRStepHandlerBase {
     return dataTemplate;
   };
 
-  private getSubtitleMarkup(numChoices: number) {
+  private getSubtitleMarkup(numChoices: number): string {
     return numChoices === 3
       ? "<p>You'll need to verify it's you to continue signing in to your account.</p>"
       : "<p>You'll need a verification code to continue signing in to your account.</p>";
   }
 
-  private getChoicesMarkup(choices: IconText[]) {
+  private getChoicesMarkup(choices: IconText[]): string {
     return `<ul class="fr-list">
     ${choices
       .map(
-        (choice: any, i: number) =>
-          `<li class="fr-list-item fr-icon-list-${choice.icon}" data-choice="${i}">${choice.text}</li>`,
+        (x: IconText, i: number) =>
+          `<li class="fr-list-item fr-icon-list-${x.icon}" data-choice="${i}">${x.text}</li>`,
       )
       .join('')}</ul>`;
   }
 
-  private updateChoiceStrings(choices: string[]) {
+  private updateChoiceStrings(choices: string[]): IconText[] {
     const twoChoices = choices.length === 2 ? true : false;
     return choices.map((choice) => {
       const icon = choice.toLowerCase();
@@ -104,7 +104,7 @@ class ChoiceStepHandler extends FRStepHandlerBase {
     });
   }
 
-  private getCallback = () => {
+  private getCallback = (): ChoiceCallback => {
     return this.step.getCallbackOfType<ChoiceCallback>(CallbackType.ChoiceCallback);
   };
 }

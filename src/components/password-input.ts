@@ -9,15 +9,15 @@ class PasswordInput {
     this.togglerIcon = this.toggler.querySelector('i') as HTMLElement;
   }
 
-  public bind = () => {
+  public bind = (): void => {
     this.toggler.addEventListener('click', this.onToggle);
   };
 
-  public unbind = () => {
+  public unbind = (): void => {
     this.toggler.removeEventListener('click', this.onToggle);
   };
 
-  private onToggle = () => {
+  private onToggle = (): void => {
     this.input.type = this.input.type === 'text' ? 'password' : 'text';
     this.togglerIcon.innerText = this.input.type === 'text' ? 'visibility' : 'visibility_off';
   };

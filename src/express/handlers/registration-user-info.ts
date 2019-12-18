@@ -19,7 +19,7 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
   /**
    * Displays a retry message and enables the submit button.
    */
-  public retry = () => {
+  public retry = (): Promise<FRStep> => {
     this.deferred = new Deferred<FRStep>();
     this.retryMessage.style.display = 'block';
     this.submit.enable();
@@ -27,17 +27,17 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
     return this.deferred.promise;
   };
 
-  protected bind = () => {
+  protected bind = (): void => {
     this.passwordInput.bind();
     this.submit.bind(this.onSubmit);
   };
 
-  protected unbind = () => {
+  protected unbind = (): void => {
     this.passwordInput.unbind();
     this.submit.unbind(this.onSubmit);
   };
 
-  protected getRefs = () => {
+  protected getRefs = (): void => {
     this.username = this.findElement('#fr-username');
     this.password = this.findElement('#fr-password');
     this.passwordInput = new PasswordInput(this.password);
@@ -46,15 +46,15 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
     this.addAttributeInputs();
   };
 
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     return template;
   };
 
-  protected ready = () => {
+  protected ready = (): void => {
     this.username.focus();
   };
 
-  protected addAttributeInputs = () => {
+  protected addAttributeInputs = (): void => {
     const container = this.findElement('#fr-attributes');
     const callbacks = this.step.getCallbacksOfType<AttributeInputCallback<string>>(
       CallbackType.StringAttributeInputCallback,
@@ -98,7 +98,7 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
     container.append(...formGroups);
   };
 
-  protected onSubmit = async () => {
+  protected onSubmit = async (): Promise<void> => {
     this.submit.disable('Registering...');
 
     this.step.setCallbackValue(CallbackType.ValidatedCreateUsernameCallback, this.username.value);

@@ -18,7 +18,7 @@ class UsernamePasswordStepHandler extends FRStepHandlerBase {
   /**
    * Displays a retry message and enables the submit button.
    */
-  public retry = () => {
+  public retry = (): Promise<FRStep> => {
     this.deferred = new Deferred<FRStep>();
     this.retryMessage.style.display = 'block';
     this.submit.enable();
@@ -26,17 +26,17 @@ class UsernamePasswordStepHandler extends FRStepHandlerBase {
     return this.deferred.promise;
   };
 
-  protected bind = () => {
+  protected bind = (): void => {
     this.submit.bind(this.onSubmit);
     this.passwordInput.bind();
   };
 
-  protected unbind = () => {
+  protected unbind = (): void => {
     this.submit.unbind(this.onSubmit);
     this.passwordInput.unbind();
   };
 
-  protected getRefs = () => {
+  protected getRefs = (): void => {
     this.username = this.findElement('#fr-username');
     this.password = this.findElement('#fr-password');
     this.retryMessage = this.findElement('.fr-retry');
@@ -44,15 +44,15 @@ class UsernamePasswordStepHandler extends FRStepHandlerBase {
     this.passwordInput = new PasswordInput(this.password);
   };
 
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     return template;
   };
 
-  protected ready = () => {
+  protected ready = (): void => {
     this.username.focus();
   };
 
-  protected onSubmit = () => {
+  protected onSubmit = (): void => {
     this.submit.disable();
     this.step.setCallbackValue(CallbackType.NameCallback, this.username.value);
     this.step.setCallbackValue(CallbackType.PasswordCallback, this.password.value);
