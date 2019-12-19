@@ -15,18 +15,19 @@
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack --env.DEV=no",
     "build:e2e": "webpack --config e2e/server/webpack.config.js",
     "clean": "shx rm -rf bundles lib lib-esm",
+    "clean:all": "npm run clean && shx rm -rf node_modules && git clean -fX",
     "start": "webpack --env.DEV=yes",
     "lint": "eslint --ignore-path .gitignore '**/*.ts' --fix",
     "eslint-check": "eslint --print-config src/index.ts | eslint-config-prettier-check",
-    "docs": "npm run docs:clean && npm run docs:gen",
-    "docs:gen": "typedoc --mode file ./src",
-    "docs:clean": "shx rm -rf docs",
-    "docs:watch": "watch 'npm run docs' ./src",
     "certs:make": "sh ./create_certs.sh",
     "certs:trust:ca": "security add-trusted-cert -d -r trustRoot -k '/Library/Keychains/System.keychain' certs/ca.crt",
     "certs:trust:site": "security add-trusted-cert -d -r trustAsRoot -k '/Library/Keychains/System.keychain' certs/samples.crt",
     "certs:trust:all": "npm run certs:trust:ca && npm run certs:trust:site",
     "certs:untrust": "security delete-certificate -c forgerock-sdk-samples.com",
+    "docs": "npm run docs:clean && npm run docs:gen",
+    "docs:gen": "typedoc --mode file ./src",
+    "docs:clean": "shx rm -rf docs",
+    "docs:watch": "watch 'npm run docs' ./src",
     "server:e2e": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
     "server:samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
     "test": "npm run test:unit && npm run test:e2e",
@@ -50,7 +51,7 @@
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
-    "@forgerock/javascript-sdk": "^1.0.0"
+    "@forgerock/javascript-sdk": "^1.0.1"
   },
   "devDependencies": {
     "@forgerock/ui-design": "^0.1.1",
