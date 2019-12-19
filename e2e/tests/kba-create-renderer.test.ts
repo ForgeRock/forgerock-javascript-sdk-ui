@@ -40,6 +40,7 @@ describe(testName, () => {
       // Ensure the right number of predefined questions are listed (options + 1 for "custom")
       const actualOptions = await actualDropdowns[i].$$('option');
       expect(actualOptions.length).toBe(callbacks[i].getPredefinedQuestions().length + 1);
+
       // Ensure the right question is pre-selected
       const dropdownValueProp = await actualDropdowns[i].getProperty('value');
       const dropdownValue = await dropdownValueProp.jsonValue();
@@ -59,14 +60,17 @@ describe(testName, () => {
       // Ensure the number of options equals the number of predefined questions plus "custom"
       const actualOptions = await actualDropdowns[i].$$('option');
       expect(actualOptions.length).toBe(callbacks.length + 1);
+
       // Ensure "custom" is initially hidden
       let isHidden = await hasClass(actualCustomWraps[i], 'd-none');
       expect(isHidden).toBe(true);
+
       // Ensure "custom" is visible when custom question is selected
       const customQuestion = await getInnerHtml(actualOptions[actualOptions.length - 1]);
       await setDropdownValue(actualDropdowns[i], customQuestion);
       isHidden = await hasClass(actualCustomWraps[i], 'd-none');
       expect(isHidden).toBe(false);
+
       // Ensure "custom" is hidden when custom question is not selected
       const firstQuestion = await getInnerHtml(actualOptions[0]);
       await setDropdownValue(actualDropdowns[i], firstQuestion);

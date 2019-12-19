@@ -27,11 +27,13 @@ beforeAll(async () => {
 
 describe(testName, () => {
   it('renders correctly', async () => {
+    // Has the correct text
     if (expectedLabelText) {
       const actualLabelText = await getInnerHtml(actualLabel);
       expect(actualLabelText).toBe(expectedLabelText);
     }
 
+    // Has the correct buttons
     expect(actualButtons.length).toBe(expectedOptions.length);
     for (let i = 0; i < expectedOptions.length; i++) {
       const buttonText = await getInnerHtml(actualButtons[i]);

@@ -20,8 +20,11 @@ beforeAll(async () => {
 
 describe(testName, () => {
   it('renders correctly', async () => {
+    // Has the correct text
     const actualParagraphText = await getInnerHtml(actualParagraph);
     expect(actualParagraphText).toBe(expectedText);
+
+    // Submit is enabled
     const actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(true);
   });

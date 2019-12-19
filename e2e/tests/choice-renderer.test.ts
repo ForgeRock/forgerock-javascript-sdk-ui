@@ -24,12 +24,16 @@ beforeAll(async () => {
 
 describe(testName, () => {
   it('renders correctly', async () => {
+    // Has the correct text
     const actualLabelText = await getInnerHtml(actualLabel);
-    const actualDropdownValue = parseInt(await getValue(actualDropdown));
-    const actualSubmitEnabled = await isSubmitEnabled();
-
     expect(actualLabelText).toBe(expectedLabelText);
+
+    // The default option is selected
+    const actualDropdownValue = parseInt(await getValue(actualDropdown));
     expect(actualDropdownValue).toBe(expectedSelected);
+
+    // Submit is enabled
+    const actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(true);
   });
 });

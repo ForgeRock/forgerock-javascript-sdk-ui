@@ -24,10 +24,15 @@ beforeAll(async () => {
 
 describe(testName, () => {
   it('renders correctly', async () => {
+    // Has the correct text
     const actualParagraphText = await getInnerHtml(actualParagraph);
     expect(actualParagraphText).toBe(expectedText);
+
+    // Checkbox is unchecked
     const actualCheckboxChecked = await getProperty<boolean>(actualCheckbox, 'checked');
     expect(actualCheckboxChecked).toBe(false);
+
+    // Submit is disabled
     const actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(false);
   });

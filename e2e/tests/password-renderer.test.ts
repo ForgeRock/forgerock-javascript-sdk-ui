@@ -26,10 +26,15 @@ beforeAll(async () => {
 
 describe(testName, () => {
   it('renders correctly', async () => {
+    // Starts as password type
     const actualInputType = await getProperty<string>(actualInput, 'type');
     expect(actualInputType).toBe('password');
+
+    // Has the correct label
     const actualLabelText = await getInnerHtml(actualLabel);
     expect(actualLabelText).toBe(expectedLabelText);
+
+    // Submit is disabled
     const actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(false);
   });
@@ -39,6 +44,7 @@ describe(testName, () => {
     await actualToggle.click();
     let actualInputType = await getProperty<string>(actualInput, 'type');
     expect(actualInputType).toBe('text');
+
     // Hide password
     await actualToggle.click();
     actualInputType = await getProperty<string>(actualInput, 'type');
@@ -49,10 +55,12 @@ describe(testName, () => {
     // Disabled with no input
     let actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(false);
+
     // Enabled with a single character
     await actualInput.type('X');
     actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(true);
+
     // Disabled when input is cleared
     await actualInput.press('Backspace');
     actualSubmitEnabled = await isSubmitEnabled();

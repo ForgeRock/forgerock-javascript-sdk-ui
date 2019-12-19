@@ -25,12 +25,16 @@ beforeAll(async () => {
 
 describe(testName, () => {
   it('renders correctly', async () => {
+    // Has the correct text
     const actualLabelText = await getInnerHtml(actualLabel);
-    const actualChecked = await getProperty<boolean>(actualCheckbox, 'checked');
-    const actualSubmitEnabled = await isSubmitEnabled();
-
     expect(actualLabelText).toBe(expectedLabelText);
+
+    // Checkbox has correct default state
+    const actualChecked = await getProperty<boolean>(actualCheckbox, 'checked');
     expect(actualChecked).toBe(expectedChecked);
+
+    // Submit is enabled
+    const actualSubmitEnabled = await isSubmitEnabled();
     expect(actualSubmitEnabled).toBe(true);
   });
 });
