@@ -31,7 +31,7 @@ abstract class FRStepHandlerBase implements FRUIStepHandler {
    * Initializes the handler and returns a Promise that will resolve with
    * the complete step when it's ready to submit.
    */
-  public completeStep = () => {
+  public completeStep = (): Promise<FRStep> => {
     this.render();
     this.getRefs();
     this.bind();
@@ -42,34 +42,40 @@ abstract class FRStepHandlerBase implements FRUIStepHandler {
   /**
    * Perform any handler-specific event binding required.
    */
-  protected bind = () => {};
+  protected bind = (): void => {
+    return;
+  };
 
   /**
    * Capture references to handler-specific DOM elements.
    */
-  protected getRefs = () => {};
+  protected getRefs = (): void => {
+    return;
+  };
 
   /**
    * Return the handler-specific HTML template.
    */
-  protected getTemplate = () => '';
+  protected getTemplate = (): string => '';
 
   /**
    * Perform any required action after the handler's template has been rendered.
    */
-  protected ready = () => {};
+  protected ready = (): void => {
+    return;
+  };
 
   /**
    * Render the handler's template to the target.
    */
-  protected render = () => {
+  protected render = (): void => {
     this.target.innerHTML = this.getTemplate();
   };
 
   /**
    * Helper for locating a DOM element within the target.
    */
-  protected findElement = <T extends Element>(selector: string, required: boolean = true): T => {
+  protected findElement = <T extends Element>(selector: string, required = true): T => {
     const el = this.target.querySelector<T>(selector);
     if (required && !el) {
       throw new Error(`Element "${selector}" not found`);

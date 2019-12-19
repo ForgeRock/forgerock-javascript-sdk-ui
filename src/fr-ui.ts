@@ -81,8 +81,8 @@ class FRUI extends Dispatcher {
 
         case StepType.LoginFailure:
           // If the first step timed out, get a new authId and resubmit
-          if (this.firstStepTimedOut(thisStep)) {
-            previousStep!.payload.authId = await this.getNewFirstAuthId();
+          if (previousStep && this.firstStepTimedOut(thisStep)) {
+            previousStep.payload.authId = await this.getNewFirstAuthId();
             return this.nextStep(previousStep);
           }
 
@@ -101,7 +101,10 @@ class FRUI extends Dispatcher {
           }
 
           // Get a handler for this step and use it to complete the step
-          this.handler = this.options.handlerFactory!(this.el, thisStep);
+          if (!this.options.handlerFactory) {
+            throw new Error('No handler factory is configured');
+          }
+          this.handler = this.options.handlerFactory(this.el, thisStep);
           if (!this.handler) {
             throw new Error('Handler factory failed to produce a handler');
           }
@@ -122,13 +125,13 @@ class FRUI extends Dispatcher {
     }
   }
 
-  private firstStepTimedOut = (step: FRLoginFailure) => {
+  private firstStepTimedOut = (step: FRLoginFailure): boolean => {
     const isFirstStep = this.successfulStages.length === 0;
     const isTimeoutError = step.getReason() === ErrorCode.Timeout;
     return isFirstStep && isTimeoutError;
   };
 
-  private getNewFirstAuthId = async () => {
+  private getNewFirstAuthId = async (): Promise<string | undefined> => {
     const firstStep = await FRAuth.next();
     return firstStep.payload.authId;
   };

@@ -10,6 +10,8 @@ import {
   PollingWaitCallback,
   ReCaptchaCallback,
   TermsAndConditionsCallback,
+  TextOutputCallback,
+  ValidatedCreatePasswordCallback,
 } from '@forgerock/javascript-sdk';
 import { FRUIStepHandler } from '../../interfaces';
 import Deferred from '../../util/deferred';
@@ -29,6 +31,7 @@ import PasswordCallbackRenderer from '../renderers/password';
 import PollingWaitCallbackRenderer from '../renderers/polling-wait';
 import ReCaptchaCallbackRenderer from '../renderers/recaptcha';
 import TermsAndConditionsCallbackRenderer from '../renderers/terms';
+import TextOutputCallbackRenderer from '../renderers/text';
 import template from '../views/form.html';
 
 /**
@@ -115,19 +118,19 @@ class BasicStepHandler implements FRUIStepHandler {
     return this.deferred.promise;
   };
 
-  private setHeader = () => {
+  private setHeader = (): void => {
     const h1 = this.container.querySelector('h1');
     if (h1) {
       h1.innerHTML = this.step.getHeader() || '';
     }
   };
 
-  private createRenderers = () => {
+  private createRenderers = (): CallbackRenderer[] => {
     const renderers = this.step.callbacks.map(this.createRenderer);
     return renderers;
   };
 
-  private createRenderer = (cb: FRCallback, index: number) => {
+  private createRenderer = (cb: FRCallback, index: number): CallbackRenderer => {
     if (this.rendererFactory) {
       const renderer = this.rendererFactory(cb, index, this.step, this.onChange);
       if (renderer) return renderer;
@@ -146,8 +149,11 @@ class BasicStepHandler implements FRUIStepHandler {
         return new ConfirmationCallbackRenderer(cb as ConfirmationCallback, index, this.onChange);
 
       case CallbackType.PasswordCallback:
-      case CallbackType.ValidatedCreatePasswordCallback:
         return new PasswordCallbackRenderer(cb as PasswordCallback, index, this.onChange);
+
+      case CallbackType.ValidatedCreatePasswordCallback:
+        const passwordCallback = cb as ValidatedCreatePasswordCallback;
+        return new PasswordCallbackRenderer(passwordCallback, index, this.onChange);
 
       case CallbackType.PollingWaitCallback:
         return new PollingWaitCallbackRenderer(cb as PollingWaitCallback, index, this.onChange);
@@ -158,6 +164,9 @@ class BasicStepHandler implements FRUIStepHandler {
       case CallbackType.TermsAndConditionsCallback:
         const termsCallback = cb as TermsAndConditionsCallback;
         return new TermsAndConditionsCallbackRenderer(termsCallback, index, this.onChange);
+
+      case CallbackType.TextOutputCallback:
+        return new TextOutputCallbackRenderer(cb as TextOutputCallback, index);
 
       case CallbackType.KbaCreateCallback:
         const kbaCreateCallback = cb as KbaCreateCallback;
@@ -172,7 +181,7 @@ class BasicStepHandler implements FRUIStepHandler {
     }
   };
 
-  private onChange = () => {
+  private onChange = (): void => {
     const isValid = this.isValid();
     this.setSubmitButton(isValid);
 
@@ -185,33 +194,34 @@ class BasicStepHandler implements FRUIStepHandler {
     }
   };
 
-  private requiresSubmitButton = () => {
+  private requiresSubmitButton = (): boolean => {
     const intersection = this.step.callbacks.filter((x) =>
       this.callbacksThatDontRequireSubmitButton.includes(x.getType()),
     );
     return intersection.length === 0;
   };
 
-  private createSubmitButton = () => {
+  private createSubmitButton = (): HTMLButtonElement => {
     const button = el<HTMLButtonElement>('button', 'btn btn-primary');
     button.disabled = !this.isValid();
+    button.id = 'fr-submit';
     button.innerText = 'Next';
     button.addEventListener('click', this.resolve);
     return button;
   };
 
-  private isValid = () => {
-    const isInvalid = (x: CallbackRenderer) => x.isValid !== undefined && !x.isValid();
+  private isValid = (): boolean => {
+    const isInvalid = (x: CallbackRenderer): boolean => x.isValid !== undefined && !x.isValid();
     return !this.renderers.some(isInvalid);
   };
 
-  private setSubmitButton = (isValid?: boolean) => {
+  private setSubmitButton = (isValid?: boolean): void => {
     if (this.submit) {
       this.submit.disabled = isValid !== undefined ? !isValid : !this.isValid();
     }
   };
 
-  private resolve = () => {
+  private resolve = (): void => {
     this.renderers
       .filter((x) => !!x.destroy)
       .forEach((x) => (x as DestroyableCallbackRenderer).destroy());

@@ -26,22 +26,22 @@ class ChoiceCallbackRenderer implements DestroyableCallbackRenderer, FocusableCa
   /**
    * Removes event listeners.
    */
-  public destroy = () => this.input.removeEventListener('change', this.onInput);
+  public destroy = (): void => this.input.removeEventListener('change', this.onInput);
 
   /**
    * Sets the focus on the dropdown.
    */
-  public focus = () => this.input.focus();
+  public focus = (): void => this.input.focus();
 
   /**
    * Returns true if the dropdown has a value selected.
    */
-  public isValid = () => this.input && this.input.value.length > 0;
+  public isValid = (): boolean => this.input && this.input.value.length > 0;
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     const defaultIndex = this.callback.getInputValue() as number;
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
     const id = `fr-callback-${this.index}`;
@@ -71,7 +71,7 @@ class ChoiceCallbackRenderer implements DestroyableCallbackRenderer, FocusableCa
     return formGroup;
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     this.callback.setChoiceIndex(Number(this.input.value));
     this.onChange(this);
   };

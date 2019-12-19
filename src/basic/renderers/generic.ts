@@ -27,22 +27,22 @@ class GenericCallbackRenderer implements DestroyableCallbackRenderer, FocusableC
   /**
    * Removes event listeners.
    */
-  public destroy = () => this.input.removeEventListener('keyup', this.onInput);
+  public destroy = (): void => this.input.removeEventListener('keyup', this.onInput);
 
   /**
    * Sets the focus on the text input.
    */
-  public focus = () => this.input.focus();
+  public focus = (): void => this.input.focus();
 
   /**
    * Returns true if the text input has a value.
    */
-  public isValid = () => this.input && this.input.value.length > 0;
+  public isValid = (): boolean => this.input && this.input.value.length > 0;
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     // Create basic structure
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
     const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group');
@@ -78,7 +78,7 @@ class GenericCallbackRenderer implements DestroyableCallbackRenderer, FocusableC
     return formGroup;
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     this.callback.setInputValue(this.input.value);
     this.onChange(this);
   };

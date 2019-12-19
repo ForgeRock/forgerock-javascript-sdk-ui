@@ -21,7 +21,7 @@ class PollingWaitCallbackRenderer implements CallbackRenderer {
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
     formGroup.innerHTML = this.callback.getMessage();
     return formGroup;
@@ -30,7 +30,7 @@ class PollingWaitCallbackRenderer implements CallbackRenderer {
   /**
    * Starts the timeout after which `onChange` will be called.
    */
-  public onInjected = () => {
+  public onInjected = (): void => {
     const waitTime = this.callback.getWaitTime();
     window.setTimeout(() => this.onChange(this), waitTime);
   };

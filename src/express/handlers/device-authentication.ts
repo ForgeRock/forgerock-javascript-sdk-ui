@@ -11,16 +11,16 @@ class DeviceAuthenticationStepHandler extends FRStepHandlerBase {
   /** @hidden */
   public retry = undefined;
 
-  protected getRefs = () => {
+  protected getRefs = (): void => {
     this.heading = this.findElement('h2');
   };
 
-  protected render = () => {
+  protected render = (): void => {
     this.target.innerHTML = template;
     this.invokeWebAuthn();
   };
 
-  protected invokeWebAuthn = async () => {
+  protected invokeWebAuthn = async (): Promise<void> => {
     this.heading.innerHTML = 'Confirming device credentials...';
     const result = await FRWebAuthn.authenticate(this.step);
     this.deferred.resolve(result);

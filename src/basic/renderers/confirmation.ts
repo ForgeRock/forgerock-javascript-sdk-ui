@@ -33,7 +33,7 @@ class ConfirmationCallbackRenderer
   /**
    * Removes event listeners.
    */
-  public destroy = () => {
+  public destroy = (): void => {
     this.buttons.forEach((x) => x.element.removeEventListener('click', x.handler));
     this.buttons = [];
   };
@@ -41,39 +41,37 @@ class ConfirmationCallbackRenderer
   /**
    * Sets the focus on the first button.
    */
-  public focus = () => this.buttons[0].element.focus();
+  public focus = (): void => this.buttons[0].element.focus();
 
   /**
    * Creates all required DOM elements and returns the containing element.
    */
-  public render = () => {
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
-    const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group');
 
     // Add the prompt
     const prompt = this.callback.getPrompt();
     if (prompt) {
       const label = el<HTMLLabelElement>('label');
       label.innerHTML = prompt;
-      formLabelGroup.appendChild(label);
+      formGroup.appendChild(label);
     }
 
     // Add the buttons
-    const defaultOption = this.callback.getDefaultOption();
     this.buttons = this.callback.getOptions().map((x, i) => {
-      const handler = () => this.onInput(i);
+      const handler = (): void => this.onInput(i);
       const element = el<HTMLButtonElement>('button');
-      element.className = defaultOption === i ? 'btn btn-primary' : 'btn';
+      element.className = 'btn btn-primary mt-3';
       element.innerHTML = x;
       element.addEventListener('click', handler);
       return { element, handler };
     });
-    this.buttons.forEach((x) => formLabelGroup.appendChild(x.element));
+    this.buttons.forEach((x) => formGroup.appendChild(x.element));
 
     return formGroup;
   };
 
-  private onInput = (index: number) => {
+  private onInput = (index: number): void => {
     this.callback.setInputValue(index);
     this.onChange(this);
   };

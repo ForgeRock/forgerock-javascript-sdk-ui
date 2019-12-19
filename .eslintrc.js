@@ -10,14 +10,13 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: {},
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'prettier'],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off"
-    '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/no-use-before-define': 'warn',
     'max-len': ['error', { code: 100 }],
-    quotes: ['error', 'single', { allowTemplateLiterals: true }],
+    quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
   },
   settings: {},
 };

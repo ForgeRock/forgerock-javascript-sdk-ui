@@ -15,7 +15,7 @@ class UsernameStepHandler extends FRStepHandlerBase {
   /**
    * Displays a retry message and enables the submit button.
    */
-  public retry = () => {
+  public retry = (): Promise<FRStep> => {
     this.deferred = new Deferred<FRStep>();
     this.retryMessage.style.display = 'block';
     this.submit.enable();
@@ -23,29 +23,29 @@ class UsernameStepHandler extends FRStepHandlerBase {
     return this.deferred.promise;
   };
 
-  protected bind = () => {
+  protected bind = (): void => {
     this.submit.bind(this.onSubmit);
   };
 
-  protected unbind = () => {
+  protected unbind = (): void => {
     this.submit.unbind(this.onSubmit);
   };
 
-  protected getRefs = () => {
+  protected getRefs = (): void => {
     this.retryMessage = this.findElement('.fr-retry');
     this.submit = new Button(this.findElement('.btn-primary'));
     this.username = this.findElement('#fr-username');
   };
 
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     return template;
   };
 
-  protected ready = () => {
+  protected ready = (): void => {
     this.username.focus();
   };
 
-  protected onSubmit = () => {
+  protected onSubmit = (): void => {
     this.submit.disable();
     this.step.setCallbackValue(CallbackType.NameCallback, this.username.value);
     this.unbind();
