@@ -98,8 +98,8 @@ class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
     formGroup.appendChild(selectWrap);
 
     // Create the "custom question" input
-    this.customWrap = el<HTMLDivElement>('div', 'form-label-group mb-1 d-none');
-    this.custom = el<HTMLInputElement>('input', 'form-control');
+    this.customWrap = el<HTMLDivElement>('div', 'form-label-group fr-kba-custom-wrap mb-1 d-none');
+    this.custom = el<HTMLInputElement>('input', 'form-control fr-kba-custom');
     this.custom.id = `fr-callback-${this.index}-custom`;
     this.custom.type = 'text';
     this.custom.value = isCustomQuestion ? questionText : '';
@@ -113,7 +113,7 @@ class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
 
     // Create an input for the answer
     const answerWrap = el<HTMLDivElement>('div', 'form-label-group mb-0');
-    this.answer = el<HTMLInputElement>('input', 'form-control');
+    this.answer = el<HTMLInputElement>('input', 'form-control fr-kba-answer');
     this.answer.id = `fr-callback-${this.index}-answer`;
     this.answer.placeholder = TEXT.answerLabel;
     this.answer.type = 'text';

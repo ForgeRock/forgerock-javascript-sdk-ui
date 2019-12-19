@@ -21,32 +21,38 @@ writing tests.
 Each test should load the test page, specifying a tree name that matches a property in the mocked data object. The mocked data can be consumed with the core SDK to more easily access expected values.
 
 ```ts
-describe('MyTest', () => {
-  it('works correctly', async () => {
-    try {
-      // Use the SDK to simplify consuming mocked data
-      const step = new FRStep(data.MyTest);
-      const callback = step.getCallbackOfType<AttributeInputCallback<boolean>>(
-        CallbackType.BooleanAttributeInputCallback,
-      );
-      const expectedChecked = callback.getInputValue() as boolean;
-      const expectedLabel = callback.getPrompt();
+const testName = 'MyTest';
 
-      // Load the test page
-      await setTree('MyTest');
+let actualCheckbox: ElementHandle<HTMLInputElement>;
+let actualLabel: ElementHandle<HTMLLabelElement>;
+let expectedChecked: boolean;
+let expectedLabelText: string;
 
-      // Use helpers to get actual values from the page
-      const actualChecked = await getProperty<boolean>('#fr-callback-0', 'checked');
-      const actualLabel = await getInnerHtml('label');
-      const actualSubmitEnabled = await isSubmitEnabled();
+// Capture expected values, and then navigate to the test page and capture element references
+beforeAll(async () => {
+  const step = new FRStep(data[testName]);
+  const callbackType = CallbackType.BooleanAttributeInputCallback;
+  const callback = step.getCallbackOfType<AttributeInputCallback<boolean>>(callbackType);
+  expectedChecked = callback.getInputValue() as boolean;
+  expectedLabelText = callback.getPrompt();
 
-      // Make assertions
-      expect(actualChecked).toBe(expectedChecked);
-      expect(actualLabel).toBe(expectedLabel);
-      expect(actualSubmitEnabled).toBe(true);
-    } catch (error) {
-      fail(error);
-    }
+  await setTree(testName);
+
+  actualCheckbox = await getElement<HTMLInputElement>('.fr-callback-0 input[type=checkbox]');
+  actualLabel = await getElement<HTMLLabelElement>('.fr-callback-0 label');
+});
+
+describe(testName, () => {
+  it('renders correctly', async () => {
+    // Use helpers to get actual values from the page
+    const actualChecked = await getProperty<boolean>(actualCheckbox, 'checked');
+    const actualLabelText = await getInnerHtml(actualLabel);
+    const actualSubmitEnabled = await isSubmitEnabled();
+
+    // Make assertions
+    expect(actualChecked).toBe(expectedChecked);
+    expect(actualLabelText).toBe(expectedLabelText);
+    expect(actualSubmitEnabled).toBe(true);
   });
 });
 ```

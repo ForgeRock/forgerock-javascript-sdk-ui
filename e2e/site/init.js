@@ -18,18 +18,6 @@ async function login() {
 
   const frui = new forgerock.FRUI();
   await frui.getSession();
-
-  // console.log(result);
-
-  // if (result.type === 'LoginSuccess') {
-  //   target.innerHTML = `Success:<br/>${result.getSessionToken()}<br/><br/>Logging out in 3 seconds...`;
-  //   setTimeout(async () => {
-  //     await forgerock.SessionManager.logout();
-  //     window.location.reload(true);
-  //   }, 3000);
-  // } else {
-  //   target.innerHTML = `Failure: ${result.getMessage()}`;
-  // }
 }
 
 window.addEventListener('load', login);

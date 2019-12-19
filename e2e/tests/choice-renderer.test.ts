@@ -1,26 +1,35 @@
 import { CallbackType, ChoiceCallback, FRStep } from '@forgerock/javascript-sdk';
+import { ElementHandle } from 'puppeteer';
 import data from '../server/data';
-import { getInnerHtml, getValue, isSubmitEnabled, setTree } from './helpers';
+import { getElement, getInnerHtml, getValue, isSubmitEnabled, setTree } from './helpers';
 
-describe('ChoiceCallbackRenderer', () => {
-  it('works correctly', async () => {
-    try {
-      const step = new FRStep(data.ChoiceCallbackRendererTest);
-      const callback = step.getCallbackOfType<ChoiceCallback>(CallbackType.ChoiceCallback);
-      const expectedLabel = callback.getPrompt();
-      const expectedSelected = callback.getDefaultChoice();
+const testName = 'ChoiceCallbackRenderer';
 
-      await setTree('ChoiceCallbackRendererTest');
+let actualLabel: ElementHandle<HTMLLabelElement>;
+let actualDropdown: ElementHandle<HTMLSelectElement>;
+let expectedLabelText: string;
+let expectedSelected: number;
 
-      const actualLabel = await getInnerHtml('label');
-      const actualSelected = await getValue('#fr-callback-0');
-      const actualSubmitEnabled = await isSubmitEnabled();
+beforeAll(async () => {
+  const step = new FRStep(data[testName]);
+  const callback = step.getCallbackOfType<ChoiceCallback>(CallbackType.ChoiceCallback);
+  expectedLabelText = callback.getPrompt();
+  expectedSelected = callback.getDefaultChoice();
 
-      expect(actualLabel).toBe(expectedLabel);
-      expect(parseInt(actualSelected as string)).toBe(expectedSelected);
-      expect(actualSubmitEnabled).toBe(true);
-    } catch (error) {
-      fail(error);
-    }
+  await setTree(testName);
+
+  actualLabel = await getElement<HTMLLabelElement>('.fr-callback-0 label');
+  actualDropdown = await getElement<HTMLSelectElement>('.fr-callback-0 select');
+});
+
+describe(testName, () => {
+  it('renders correctly', async () => {
+    const actualLabelText = await getInnerHtml(actualLabel);
+    const actualDropdownValue = parseInt(await getValue(actualDropdown));
+    const actualSubmitEnabled = await isSubmitEnabled();
+
+    expect(actualLabelText).toBe(expectedLabelText);
+    expect(actualDropdownValue).toBe(expectedSelected);
+    expect(actualSubmitEnabled).toBe(true);
   });
 });

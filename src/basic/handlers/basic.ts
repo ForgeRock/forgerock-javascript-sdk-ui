@@ -10,6 +10,8 @@ import {
   PollingWaitCallback,
   ReCaptchaCallback,
   TermsAndConditionsCallback,
+  TextOutputCallback,
+  ValidatedCreatePasswordCallback,
 } from '@forgerock/javascript-sdk';
 import { FRUIStepHandler } from '../../interfaces';
 import Deferred from '../../util/deferred';
@@ -29,6 +31,7 @@ import PasswordCallbackRenderer from '../renderers/password';
 import PollingWaitCallbackRenderer from '../renderers/polling-wait';
 import ReCaptchaCallbackRenderer from '../renderers/recaptcha';
 import TermsAndConditionsCallbackRenderer from '../renderers/terms';
+import TextOutputCallbackRenderer from '../renderers/text';
 import template from '../views/form.html';
 
 /**
@@ -146,8 +149,11 @@ class BasicStepHandler implements FRUIStepHandler {
         return new ConfirmationCallbackRenderer(cb as ConfirmationCallback, index, this.onChange);
 
       case CallbackType.PasswordCallback:
-      case CallbackType.ValidatedCreatePasswordCallback:
         return new PasswordCallbackRenderer(cb as PasswordCallback, index, this.onChange);
+
+      case CallbackType.ValidatedCreatePasswordCallback:
+        const passwordCallback = cb as ValidatedCreatePasswordCallback;
+        return new PasswordCallbackRenderer(passwordCallback, index, this.onChange);
 
       case CallbackType.PollingWaitCallback:
         return new PollingWaitCallbackRenderer(cb as PollingWaitCallback, index, this.onChange);
@@ -158,6 +164,9 @@ class BasicStepHandler implements FRUIStepHandler {
       case CallbackType.TermsAndConditionsCallback:
         const termsCallback = cb as TermsAndConditionsCallback;
         return new TermsAndConditionsCallbackRenderer(termsCallback, index, this.onChange);
+
+      case CallbackType.TextOutputCallback:
+        return new TextOutputCallbackRenderer(cb as TextOutputCallback, index);
 
       case CallbackType.KbaCreateCallback:
         const kbaCreateCallback = cb as KbaCreateCallback;

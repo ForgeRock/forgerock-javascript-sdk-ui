@@ -4,7 +4,7 @@ const { CallbackType } = require('@forgerock/javascript-sdk');
 const authId = 'foo';
 
 const data = {
-  BooleanAttributeCallbackRendererTest: {
+  BooleanAttributeCallbackRenderer: {
     authId,
     callbacks: [
       {
@@ -22,7 +22,7 @@ const data = {
       },
     ],
   },
-  ChoiceCallbackRendererTest: {
+  ChoiceCallbackRenderer: {
     authId,
     callbacks: [
       {
@@ -34,6 +34,102 @@ const data = {
           { name: 'defaultChoice', value: 1 },
         ],
         type: CallbackType.ChoiceCallback,
+      },
+    ],
+  },
+  ConfirmationCallbackRenderer: {
+    authId,
+    callbacks: [
+      {
+        _id: 0,
+        input: [{ name: 'IDToken1', value: 0 }],
+        output: [
+          { name: 'prompt', value: '' },
+          { name: 'messageType', value: 0 },
+          { name: 'options', value: ['Yes', 'No'] },
+          { name: 'optionType', value: -1 },
+          { name: 'defaultOption', value: 1 },
+        ],
+        type: CallbackType.ConfirmationCallback,
+      },
+    ],
+  },
+  KbaCreateCallbackRenderer: {
+    authId,
+    callbacks: [
+      {
+        _id: 0,
+        input: [
+          { name: 'IDToken1question', value: '' },
+          { name: 'IDToken1answer', value: '' },
+        ],
+        output: [
+          { name: 'prompt', value: 'Foo!' },
+          {
+            name: 'predefinedQuestions',
+            value: ["What's your favorite color?", 'Who was your first employer?'],
+          },
+        ],
+        type: CallbackType.KbaCreateCallback,
+      },
+      {
+        _id: 1,
+        input: [
+          { name: 'IDToken2question', value: '' },
+          { name: 'IDToken2answer', value: '' },
+        ],
+        output: [
+          { name: 'prompt', value: 'Foo!' },
+          {
+            name: 'predefinedQuestions',
+            value: ["What's your favorite color?", 'Who was your first employer?'],
+          },
+        ],
+        type: CallbackType.KbaCreateCallback,
+      },
+    ],
+  },
+  PasswordCallbackRenderer: {
+    authId,
+    callbacks: [
+      {
+        _id: 0,
+        input: [{ name: 'IDToken1', value: '' }],
+        output: [
+          { name: 'echoOn', value: false },
+          { name: 'policies', value: [] },
+          { name: 'failedPolicies', value: [] },
+          { name: 'prompt', value: 'Password' },
+        ],
+        type: CallbackType.ValidatedCreatePasswordCallback,
+      },
+    ],
+  },
+  TermsAndConditionsCallbackRenderer: {
+    authId,
+    callbacks: [
+      {
+        _id: 0,
+        input: [{ name: 'IDToken1', value: false }],
+        output: [
+          { name: 'version', value: '0.0' },
+          { name: 'terms', value: 'Lorem ipsum dolor sit amet' },
+          { name: 'createDate', value: '2019-10-28T04:20:11.320Z' },
+        ],
+        type: CallbackType.TermsAndConditionsCallback,
+      },
+    ],
+  },
+  TextOutputCallbackRenderer: {
+    authId,
+    callbacks: [
+      {
+        _id: 0,
+        output: [
+          { name: 'message', value: 'Ponies are your friends' },
+          { name: 'messageType', value: '0' },
+        ],
+        type: CallbackType.TextOutputCallback,
       },
     ],
   },

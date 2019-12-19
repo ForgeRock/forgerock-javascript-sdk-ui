@@ -1,4 +1,4 @@
-import { PasswordCallback } from '@forgerock/javascript-sdk';
+import { PasswordCallback, ValidatedCreatePasswordCallback } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
 import {
   CallbackRenderer,
@@ -22,7 +22,7 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
    * @param onChange A function to call when the callback value is changed
    */
   constructor(
-    private callback: PasswordCallback,
+    private callback: PasswordCallback | ValidatedCreatePasswordCallback,
     private index: number,
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
