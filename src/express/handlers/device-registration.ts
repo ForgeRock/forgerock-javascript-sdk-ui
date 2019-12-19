@@ -1,27 +1,29 @@
+import { FRWebAuthn } from '@forgerock/javascript-sdk';
 import FRStepHandlerBase from '../../fr-step-handler-base';
 import template from '../views/device-registration.html';
 
+/**
+ * Handler that renders a WebAuthn registration step in Express.
+ */
 class DeviceRegistrationStepHandler extends FRStepHandlerBase {
   private heading!: HTMLHeadingElement;
 
-  public completeStep = () => {
-    this.render();
-    this.getRefs();
-    this.invokeWebAuthn();
-    return this.deferred.promise;
-  };
+  /** @hidden */
+  public retry = undefined;
 
-  public getRefs = () => {
+  protected getRefs = (): void => {
     this.heading = this.findElement('h2');
   };
 
-  protected getTemplate = () => {
-    return template;
+  protected render = (): void => {
+    this.target.innerHTML = template;
+    this.invokeWebAuthn();
   };
 
-  private invokeWebAuthn = async () => {
-    this.heading.innerHTML = 'Confirming device credentials...';
-    throw new Error('Integration of SDK webauthn is not complete');
+  protected invokeWebAuthn = async (): Promise<void> => {
+    this.heading.innerHTML = 'Acquiring device credentials...';
+    const result = await FRWebAuthn.register(this.step);
+    this.deferred.resolve(result);
   };
 }
 

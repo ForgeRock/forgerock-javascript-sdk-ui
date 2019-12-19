@@ -1,6 +1,12 @@
 import { FRPolicy, PolicyRequirement } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
 
+/**
+ * Returns a UL element containing an LI for each policy failure message.
+ *
+ * @param failedPolicies The policy requirements that failed validation
+ * @param property The object property name the policy applies to
+ */
 function renderErrors(
   failedPolicies: PolicyRequirement[],
   property: string,

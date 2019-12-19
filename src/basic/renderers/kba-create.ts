@@ -1,18 +1,38 @@
 import { KbaCreateCallback } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
-import { CallbackRenderer } from '../interfaces';
+import {
+  CallbackRenderer,
+  DestroyableCallbackRenderer,
+  FocusableCallbackRenderer,
+} from '../interfaces';
 
+/** @hidden */
 const TEXT = {
   answerLabel: 'Answer',
   customLabel: 'Custom Question',
 };
 
-class KbaCreateCallbackRenderer implements CallbackRenderer {
+/**
+ * Renders a dropdown of suggested questions with an option for "Custom Question".  The question
+ * that corresponds to the `kbaIndex` constructor parameter value is selected by default.  If
+ * the user changes the selection to "Custom Question", a text input box is dynamically displayed.
+ *
+ * This renderer also adds a text input box for capturing an answer to the security question.
+ *
+ * The callback prompt will only be rendered if this is the first KBA callback in the step.
+ */
+class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private select!: HTMLSelectElement;
   private custom!: HTMLInputElement;
   private customWrap!: HTMLDivElement;
   private answer!: HTMLInputElement;
 
+  /**
+   * @param callback The callback to render
+   * @param index The index position in the step's callback array
+   * @param kbaIndex The index position in the step's array of only KBA callbacks
+   * @param onChange A function to call when the callback value is changed
+   */
   constructor(
     private callback: KbaCreateCallback,
     private index: number,
@@ -20,24 +40,34 @@ class KbaCreateCallbackRenderer implements CallbackRenderer {
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
 
-  public destroy = () => {
+  /**
+   * Removes event listeners.
+   */
+  public destroy = (): void => {
     this.select.removeEventListener('change', this.onQuestionChange);
     this.custom.removeEventListener('keyup', this.onInput);
     this.answer.removeEventListener('keyup', this.onInput);
   };
 
-  public focus = () => {
-    this.select.focus();
-  };
+  /**
+   * Sets the focus on the dropdown.
+   */
+  public focus = (): void => this.select.focus();
 
-  public isValid = () => {
+  /**
+   * Returns true if a KBA question has been selected/entered and an answer is provided.
+   */
+  public isValid = (): boolean => {
     if (!this.select || !this.custom || !this.answer) return false;
     const hasQuestion = !this.isCustomQuestion() || this.custom.value.length > 0;
     const hasAnswer = this.answer.value.length > 0;
     return hasQuestion && hasAnswer;
   };
 
-  public render = () => {
+  /**
+   * Creates all required DOM elements and returns the containing element.
+   */
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
 
     // Only add the prompt to the first KBA question
@@ -68,8 +98,8 @@ class KbaCreateCallbackRenderer implements CallbackRenderer {
     formGroup.appendChild(selectWrap);
 
     // Create the "custom question" input
-    this.customWrap = el<HTMLDivElement>('div', 'form-label-group mb-1 d-none');
-    this.custom = el<HTMLInputElement>('input', 'form-control');
+    this.customWrap = el<HTMLDivElement>('div', 'form-label-group fr-kba-custom-wrap mb-1 d-none');
+    this.custom = el<HTMLInputElement>('input', 'form-control fr-kba-custom');
     this.custom.id = `fr-callback-${this.index}-custom`;
     this.custom.type = 'text';
     this.custom.value = isCustomQuestion ? questionText : '';
@@ -83,7 +113,7 @@ class KbaCreateCallbackRenderer implements CallbackRenderer {
 
     // Create an input for the answer
     const answerWrap = el<HTMLDivElement>('div', 'form-label-group mb-0');
-    this.answer = el<HTMLInputElement>('input', 'form-control');
+    this.answer = el<HTMLInputElement>('input', 'form-control fr-kba-answer');
     this.answer.id = `fr-callback-${this.index}-answer`;
     this.answer.placeholder = TEXT.answerLabel;
     this.answer.type = 'text';
@@ -101,7 +131,7 @@ class KbaCreateCallbackRenderer implements CallbackRenderer {
     return formGroup;
   };
 
-  private createOption = (text: string, selected: boolean) => {
+  private createOption = (text: string, selected: boolean): HTMLOptionElement => {
     const option = el<HTMLOptionElement>('option');
     option.value = text;
     option.text = text;
@@ -109,16 +139,16 @@ class KbaCreateCallbackRenderer implements CallbackRenderer {
     return option;
   };
 
-  private isCustomQuestion = () => {
+  private isCustomQuestion = (): boolean => {
     return this.select.value === TEXT.customLabel;
   };
 
-  private onQuestionChange = () => {
+  private onQuestionChange = (): void => {
     this.setView();
     this.onInput();
   };
 
-  private setView = () => {
+  private setView = (): void => {
     if (this.isCustomQuestion()) {
       this.customWrap.classList.remove('d-none');
     } else {
@@ -126,7 +156,7 @@ class KbaCreateCallbackRenderer implements CallbackRenderer {
     }
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     if (this.isCustomQuestion()) {
       this.callback.setQuestion(this.custom.value);
     } else {

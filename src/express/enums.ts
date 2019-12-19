@@ -1,3 +1,6 @@
+/**
+ * The set of stage values used in Express authentication trees.
+ */
 enum ExpressStage {
   DeviceAuthentication = 'DeviceAuthentication',
   DeviceRegistration = 'DeviceRegistration',

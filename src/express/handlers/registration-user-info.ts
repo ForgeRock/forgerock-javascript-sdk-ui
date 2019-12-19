@@ -5,6 +5,10 @@ import FRStepHandlerBase from '../../fr-step-handler-base';
 import Deferred from '../../util/deferred';
 import template from '../views/registration.html';
 
+/**
+ * Handler that renders inputs for username and password in an Express step, as well as
+ * inputs for each optional attribute being collected.
+ */
 class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
   private username!: HTMLInputElement;
   private password!: HTMLInputElement;
@@ -12,11 +16,28 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
   private retryMessage!: HTMLParagraphElement;
   private submit!: Button;
 
-  constructor(target: HTMLElement, step: FRStep) {
-    super(target, step);
-  }
+  /**
+   * Displays a retry message and enables the submit button.
+   */
+  public retry = (): Promise<FRStep> => {
+    this.deferred = new Deferred<FRStep>();
+    this.retryMessage.style.display = 'block';
+    this.submit.enable();
+    this.bind();
+    return this.deferred.promise;
+  };
 
-  public getRefs = () => {
+  protected bind = (): void => {
+    this.passwordInput.bind();
+    this.submit.bind(this.onSubmit);
+  };
+
+  protected unbind = (): void => {
+    this.passwordInput.unbind();
+    this.submit.unbind(this.onSubmit);
+  };
+
+  protected getRefs = (): void => {
     this.username = this.findElement('#fr-username');
     this.password = this.findElement('#fr-password');
     this.passwordInput = new PasswordInput(this.password);
@@ -25,33 +46,15 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
     this.addAttributeInputs();
   };
 
-  public retry = () => {
-    this.deferred = new Deferred<FRStep>();
-    this.retryMessage.style.display = 'block';
-    this.submit.enable();
-    this.bind();
-    return this.deferred.promise;
-  };
-
-  public bind = () => {
-    this.passwordInput.bind();
-    this.submit.bind(this.onSubmit);
-  };
-
-  protected unbind = () => {
-    this.passwordInput.unbind();
-    this.submit.unbind(this.onSubmit);
-  };
-
-  protected getTemplate = () => {
+  protected getTemplate = (): string => {
     return template;
   };
 
-  protected ready = () => {
+  protected ready = (): void => {
     this.username.focus();
   };
 
-  private addAttributeInputs = () => {
+  protected addAttributeInputs = (): void => {
     const container = this.findElement('#fr-attributes');
     const callbacks = this.step.getCallbacksOfType<AttributeInputCallback<string>>(
       CallbackType.StringAttributeInputCallback,
@@ -95,7 +98,7 @@ class RegistrationUserInfoStepHandler extends FRStepHandlerBase {
     container.append(...formGroups);
   };
 
-  private onSubmit = async () => {
+  protected onSubmit = async (): Promise<void> => {
     this.submit.disable('Registering...');
 
     this.step.setCallbackValue(CallbackType.ValidatedCreateUsernameCallback, this.username.value);

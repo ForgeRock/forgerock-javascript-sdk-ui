@@ -1,26 +1,44 @@
 import { AttributeInputCallback } from '@forgerock/javascript-sdk';
 import { el } from '../../util/dom';
-import { CallbackRenderer } from '../interfaces';
+import {
+  CallbackRenderer,
+  DestroyableCallbackRenderer,
+  FocusableCallbackRenderer,
+} from '../interfaces';
 import { renderErrors } from './errors';
 
-class BooleanAttributeCallbackRenderer implements CallbackRenderer {
+/**
+ * Renders a labeled checkbox and any policy failure messages.
+ */
+class BooleanAttributeCallbackRenderer
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private input!: HTMLInputElement;
 
+  /**
+   * @param callback The callback to render
+   * @param index The index position in the step's callback array
+   * @param onChange A function to call when the callback value is changed
+   */
   constructor(
     private callback: AttributeInputCallback<boolean>,
     private index: number,
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
 
-  public destroy = () => {
-    this.input.removeEventListener('change', this.onInput);
-  };
+  /**
+   * Removes event listeners.
+   */
+  public destroy = (): void => this.input.removeEventListener('change', this.onInput);
 
-  public focus = () => {
-    this.input.focus();
-  };
+  /**
+   * Sets the focus on the checkbox.
+   */
+  public focus = (): void => this.input.focus();
 
-  public render = () => {
+  /**
+   * Creates all required DOM elements and returns the containing element.
+   */
+  public render = (): HTMLDivElement => {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-check mb-3`);
 
     // Add checkbox
@@ -49,7 +67,7 @@ class BooleanAttributeCallbackRenderer implements CallbackRenderer {
     return formGroup;
   };
 
-  private onInput = () => {
+  private onInput = (): void => {
     this.callback.setValue(this.input.checked);
     this.onChange(this);
   };
