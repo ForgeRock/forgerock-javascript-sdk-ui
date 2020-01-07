@@ -21,16 +21,16 @@ class WebAuthnStepHandler implements FRUIStepHandler {
 
   public completeStep = async (): Promise<FRStep> => {
     switch (this.mode) {
-      case WebAuthnMode.Authenticate:
-        this.message.innerHTML = 'Please authenticate with your device ...';
-        const authenticated = await FRWebAuthn.authenticate(this.step);
-        this.deferred.resolve(authenticated);
+      case WebAuthnMode.Authentication:
+        this.message.innerHTML = 'Please authenticate using your device...';
+        await FRWebAuthn.authenticate(this.step);
+        this.deferred.resolve(this.step);
         break;
 
-      case WebAuthnMode.Register:
-        this.message.innerHTML = 'Please register your device ...';
-        const registered = await FRWebAuthn.register(this.step);
-        this.deferred.resolve(registered);
+      case WebAuthnMode.Registration:
+        this.message.innerHTML = 'Please register your device...';
+        await FRWebAuthn.register(this.step);
+        this.deferred.resolve(this.step);
         break;
 
       default:

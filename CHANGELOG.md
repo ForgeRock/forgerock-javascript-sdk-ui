@@ -5,6 +5,12 @@
 - Ability to customize text
 - Optimized stylesheet
 
+## [1.0.2] - 2020-01-06
+
+### Added
+
+- Updates to WebAuthn handler
+
 ## [1.0.1] - 2019-12-19
 
 ### Added

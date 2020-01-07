@@ -1,7 +1,7 @@
 /** @hidden */
 enum WebAuthnMode {
-  Authenticate = 'authenticate',
-  Register = 'register',
+  Authentication = 'authentication',
+  Registration = 'registration',
 }
 
 export { WebAuthnMode };
