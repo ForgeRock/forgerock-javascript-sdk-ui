@@ -1,6 +1,6 @@
 {
   "name": "@forgerock/javascript-sdk-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ForgeRock JavaScript SDK with UI rendering capability",
   "main": "./lib/",
   "module": "./lib-esm/",
