@@ -21,10 +21,10 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
     throw new Error('Cannot create handler; no step specified');
   }
 
-  const webAuthnStepType = FRWebAuthn.getWebAuthStepType(step);
+  const webAuthnStepType = FRWebAuthn.getWebAuthnStepType(step);
   if (webAuthnStepType !== WebAuthnStepType.None) {
     const isAuth = webAuthnStepType === WebAuthnStepType.Authentication;
-    const webAuthnMode = isAuth ? WebAuthnMode.Authenticate : WebAuthnMode.Register;
+    const webAuthnMode = isAuth ? WebAuthnMode.Authentication : WebAuthnMode.Registration;
     return new WebAuthnStepHandler(target, step, webAuthnMode);
   }
 

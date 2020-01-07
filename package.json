@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
-    "@forgerock/javascript-sdk": "^1.0.1"
+    "@forgerock/javascript-sdk": "^1.0.4"
   },
   "devDependencies": {
     "@forgerock/ui-design": "^0.1.1",
