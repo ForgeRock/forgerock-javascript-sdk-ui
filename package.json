@@ -1,6 +1,6 @@
 {
   "name": "@forgerock/javascript-sdk-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ForgeRock JavaScript SDK with UI rendering capability",
   "main": "./lib/",
   "module": "./lib-esm/",
@@ -29,7 +29,7 @@
     "docs:clean": "shx rm -rf docs",
     "docs:watch": "watch 'npm run docs' ./src",
     "server:e2e": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
-    "server:samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "server:samples": "http-server samples -c1 -p 9443",
     "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "jest e2e/** --config=test-e2e.config.js",
     "test:unit": "jest src/** --config=test-unit.config.js"
@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
-    "@forgerock/javascript-sdk": "^1.0.4"
+    "@forgerock/javascript-sdk": "^1.0.5"
   },
   "devDependencies": {
     "@forgerock/ui-design": "^0.1.1",
@@ -69,12 +69,12 @@
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.2",
     "file-loader": "^5.0.2",
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.1",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
     "jest-puppeteer": "^4.3.0",
     "miragejs": "^0.1.32",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "prettier": "^1.19.1",
     "puppeteer": "^2.0.0",
     "raw-loader": "^3.1.0",
