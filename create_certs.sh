@@ -5,8 +5,8 @@ openssl genrsa -des3 -out certs/ca.key 2048
 
 # Create a CA configuration file
 echo \
-"FQDN = forgerock-sdk-samples-ca.com
-ORGNAME = ForgeRock SDK Samples CA
+"FQDN = forgerock-ca.com
+ORGNAME = ForgeRock CA
 ALTNAMES = DNS:\$FQDN
 
 [ req ]
@@ -35,8 +35,8 @@ openssl genrsa -out certs/samples.key 2048
 
 # Create a CSR configuration file
 echo \
-"FQDN = forgerock-sdk-samples.com
-ORGNAME = ForgeRock SDK Samples
+"FQDN = sdks.example.com
+ORGNAME = ForgeRock SDK
 ALTNAMES = DNS:\$FQDN
 
 [ req ]
@@ -68,7 +68,7 @@ keyUsage                = digitalSignature,nonRepudiation,keyEncipherment,dataEn
 subjectAltName          = @alt_names
 
 [alt_names]
-DNS.1                   = forgerock-sdk-samples.com
+DNS.1                   = *.example.com
 "> certs/samples-crt.conf
 
 # Create the certificate for the webserver to serve

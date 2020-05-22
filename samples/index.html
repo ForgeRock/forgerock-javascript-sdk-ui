@@ -2,70 +2,23 @@
 <html>
 
 <head>
-  <title>ForgeRock JavaScript SDK UI Samples</title>
+  <title>ForgeRock JavaScript SDK Samples</title>
   <link rel="shortcut icon" href="img/fr-ico.png" type="image/png">
-  <link rel="stylesheet" type="text/css"
-    href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Material+Icons">
-  <link rel="stylesheet" type="text/css" href="css/fr-ui.css">
-  <style>
-    body {
-      padding: 2rem;
-    }
-
-    .links {
-      margin-top: 1rem;
-      text-align: center;
-    }
-  </style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
-  <div id="fr-ui">Loading...</div>
-
-  <p class="links">
-    <a href="?tree=Registration">Register</a> | <a href="?tree=Login">Log in</a> | <a href="?tree=WebAuthn">WebAuthn</a>
-  </p>
-
-  <script src="js/fr-sdk-ui.js"></script>
-  <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
-  <script>
-    async function login() {
-      const url = new URL(window.location.href);
-      const baseUrl = url.searchParams.get('baseUrl') || 'https://default.iam.example.com/am/';
-      const clientId = url.searchParams.get('clientId') || 'sdk';
-      const realmPath = url.searchParams.get('realmPath') || 'root';
-      const tree = url.searchParams.get('tree') || 'Login';
-
-      const targetId = 'fr-ui';
-      const target = document.getElementById(targetId);
-
-      forgerock.Config.set({
-        clientId,
-        redirectUri: 'https://forgerock-sdk-samples.com:3000/callback',
-        scope: 'openid profile',
-        serverConfig: { baseUrl, timeout: 30000 },
-        realmPath,
-        tree,
-      });
-
-      const frui = new forgerock.FRUI();
-      const result = await frui.getSession();
-
-      console.log(result);
-
-      if (result.type === 'LoginSuccess') {
-        target.innerHTML = `Success:<br/>${result.getSessionToken()}<br/><br/>Logging out in 3 seconds...`;
-        setTimeout(async () => {
-          await forgerock.SessionManager.logout();
-          window.location.reload(true);
-        }, 3000);
-      } else {
-        target.innerHTML = `Failure: ${result.getMessage()}`;
-      }
-    }
-
-    window.addEventListener('load', login);
-  </script>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 offset-md-4 text-center">
+        <p class="mt-5 mb-3">
+          Select a sample:
+        </p>
+        <p><a href="./basic" class="btn btn-primary">Basic Auth</a></p>
+        <p><a href="./oauth" class="btn btn-primary">OAuth 2.0</a></p>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

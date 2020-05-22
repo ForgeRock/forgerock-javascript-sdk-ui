@@ -17,6 +17,7 @@ module.exports = (env) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
           const cmds = [
             'cpy ./bundles/index.js ./samples/js --rename=fr-sdk-ui.js',
+            'cpy ./bundles/index.js.map ./samples/js',
             'cpy ./bundles/index.js ./e2e/site --rename=fr-sdk-ui.js',
             'cpy ./bundles/index.js.map ./e2e/site',
           ];
