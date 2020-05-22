@@ -1,5 +1,4 @@
 bundles/
-certs/
 docs/
 coverage/
 lib/
@@ -8,8 +7,8 @@ node_modules/
 e2e/site/fr-sdk-ui.js*
 e2e/site/index.js.map
 e2e/site/server.js
-samples/js/fr-sdk-ui.js*
-samples/css/fr-*.css
+samples/js
+samples/css
 
 .DS_Store
 .env

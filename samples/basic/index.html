@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ForgeRock JavaScript SDK UI Samples</title>
+  <link rel="shortcut icon" href="../img/fr-ico.png" type="image/png">
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Material+Icons">
+  <link rel="stylesheet" type="text/css" href="../css/fr-ui.css">
+  <style>
+    body {
+      padding: 2rem;
+    }
+    .links {
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="fr-ui">Loading...</div>
+
+  <p class="links">
+    <a href="?tree=Registration">Register</a> | <a href="?tree=Login">Log in</a> | <a href="?tree=WebAuthn">WebAuthn</a>
+  </p>
+
+  <script src="../js/fr-sdk-ui.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+  <script>
+    async function login() {
+      const targetId = 'fr-ui';
+      const target = document.getElementById(targetId);
+
+      forgerock.Config.set({
+        serverConfig: {
+          baseUrl: '<Your AM URL>', // e.g. 'https://openam.example.com:9443/openam/'
+          timeout: '<Your Timeout (milliseconds)>' // 90000 or less
+        },
+        realmPath: '<Your Realm>', // e.g. 'root'
+        tree: '<Your Auth Tree>', // e.g. 'Login'
+      });
+
+      const frui = new forgerock.FRUI();
+      const result = await frui.getSession();
+
+      console.log(result);
+
+      if (result.type === 'LoginSuccess') {
+        target.innerHTML = `Success:<br/>${result.getSessionToken()}<br/><br/>Logging out in 3 seconds...`;
+        setTimeout(async () => {
+          await forgerock.SessionManager.logout();
+          window.location.reload(true);
+        }, 3000);
+      } else {
+        target.innerHTML = `Failure: ${result.getMessage()}`;
+      }
+    }
+
+    window.addEventListener('load', login);
+  </script>
+</body>
+</html>
