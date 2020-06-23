@@ -28,8 +28,8 @@
     "docs:gen": "typedoc --mode file ./src",
     "docs:clean": "shx rm -rf docs",
     "docs:watch": "watch 'npm run docs' ./src",
-    "server:e2e": "http-server e2e/site -c1 -p 3001 --ssl --cert certs/samples.crt --key certs/samples.key",
-    "server:samples": "http-server samples -c1 -p 3000 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "start:e2e": "http-server e2e/site -c1 -p 8443 --ssl --cert certs/samples.crt --key certs/samples.key",
+    "start:samples": "http-server samples -c1 -p 8443 --ssl --cert certs/samples.crt --key certs/samples.key",
     "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "jest e2e/** --config=test-e2e.config.js",
     "test:unit": "jest src/** --config=test-unit.config.js"
