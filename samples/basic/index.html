@@ -2,10 +2,10 @@
 <html>
 <head>
   <title>ForgeRock JavaScript SDK UI Samples</title>
-  <link rel="shortcut icon" href="../img/fr-ico.png" type="image/png">
+  <link rel="shortcut icon" href="../_static/img/fr-ico.png" type="image/png">
   <link rel="stylesheet" type="text/css"
     href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Material+Icons">
-  <link rel="stylesheet" type="text/css" href="../css/fr-ui.css">
+  <link rel="stylesheet" type="text/css" href="../_static/css/fr-ui.css">
   <style>
     body {
       padding: 2rem;
@@ -21,15 +21,17 @@
   <div id="fr-ui">Loading...</div>
 
   <p class="links">
-    <a href="?tree=Registration">Register</a> | <a href="?tree=Login">Log in</a> | <a href="?tree=WebAuthn">WebAuthn</a>
+    <a href="?tree=Registration">Register</a> | <a href="?tree=UsernamePassword">Log in</a> | <a href="?tree=PasswordlessWebAuthn">WebAuthn</a>
   </p>
 
-  <script src="../js/fr-sdk-ui.js"></script>
+  <script src="../_static/js/fr-sdk-ui.js"></script>
   <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
   <script>
     async function login() {
       const targetId = 'fr-ui';
       const target = document.getElementById(targetId);
+      const url = new URL(window.location.href);
+      const tree = url.searchParams.get('tree') || 'UsernamePassword';
 
       forgerock.Config.set({
         serverConfig: {
