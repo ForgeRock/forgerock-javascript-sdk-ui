@@ -18,7 +18,7 @@
     "strict": true,
     "target": "es5"
   },
-  "exclude": ["e2e", "lib", "lib-esm"],
+  "exclude": ["tests/e2e", "lib", "lib-esm"],
   "typedocOptions": {
     "mode": "modules",
     "out": "docs"

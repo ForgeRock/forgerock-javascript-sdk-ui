@@ -1,9 +1,15 @@
 # Changelog
 
-## [Unreleased]
+## [2.0.0]
+
+### Added
 
 - Ability to customize text
 - Optimized stylesheet
+
+### Fixed
+
+- Updated all dependencies to latest version
 
 ## [1.0.2] - 2020-01-06
 
