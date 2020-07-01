@@ -16,10 +16,10 @@ module.exports = (env) => {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
           const cmds = [
-            'cpy ./bundles/index.js ./samples/js --rename=fr-sdk-ui.js',
-            'cpy ./bundles/index.js.map ./samples/js',
-            'cpy ./bundles/index.js ./e2e/site --rename=fr-sdk-ui.js',
-            'cpy ./bundles/index.js.map ./e2e/site',
+            'cpy ./bundles/index.js ./samples/_static/js --rename=fr-sdk-ui.js',
+            'cpy ./bundles/index.js.map ./samples/_static/js --rename=fr-sdk-ui.js.map',
+            'cpy ./bundles/index.js ./tests/e2e/site --rename=fr-sdk-ui.js',
+            'cpy ./bundles/index.js.map ./tests/e2e/site --rename=fr-sdk-ui.js.map',
           ];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {
@@ -33,21 +33,25 @@ module.exports = (env) => {
             });
           }
         });
-      }
-    }
+      },
+    },
   ];
 
   if (!isDev) {
     plugins.push(
-      new TypedocWebpackPlugin({
-        excludeExternals: true,
-        excludePrivate: true,
-        includeDeclarations: false,
-        ignoreCompilerErrors: true,
-        mode: 'modules',
-        name: 'ForgeRock JavaScript SDK UI',
-        out: '../docs',
-      }, './src'));
+      new TypedocWebpackPlugin(
+        {
+          excludeExternals: true,
+          excludePrivate: true,
+          includeDeclarations: false,
+          ignoreCompilerErrors: true,
+          mode: 'modules',
+          name: 'ForgeRock JavaScript SDK UI',
+          out: '../docs',
+        },
+        './src',
+      ),
+    );
   }
 
   return {
@@ -61,8 +65,8 @@ module.exports = (env) => {
           loader: 'awesome-typescript-loader',
           exclude: /node_modules/,
           query: {
-            declaration: false
-          }
+            declaration: false,
+          },
         },
         {
           test: /\.html$/,
@@ -86,4 +90,4 @@ module.exports = (env) => {
     },
     watch: isDev,
   };
-}
+};

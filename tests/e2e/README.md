@@ -2,9 +2,7 @@
 
 The E2E testing scope is to ensure UI elements are rendered and behave correctly. Integration with a live OpenAM server is not required.
 
-The implementation uses a web page that loads the SDK, OpenAM mock, and initialization script. The initialization script reads values from
-the querystring to configure the SDK, so individual tests can easily change those values. Helper methods wrap the Puppeteer API to simplify
-writing tests.
+The implementation uses a web page that loads the SDK, OpenAM mock, and initialization script. The initialization script reads values from the querystring to configure the SDK, so individual tests can easily change those values. Helper methods wrap the Puppeteer API to simplify writing tests.
 
 ## Tooling
 
