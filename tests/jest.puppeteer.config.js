@@ -5,6 +5,7 @@ module.exports = {
     // slowMo: 3000,
   },
   server: {
-    command: 'npm run build:e2e & npm run start:e2e'
-  }
+    command: 'npm run build:e2e & npm run start:e2e',
+    port: 8443,
+  },
 };

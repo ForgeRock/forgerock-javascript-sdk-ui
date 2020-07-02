@@ -8,10 +8,7 @@ module.exports = (env) => {
     {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-          const cmds = [
-            'cpy ./bundles/fr-ui.css ./samples/css',
-            'rm ./bundles/main.js'
-          ];
+          const cmds = ['cpy ./bundles/fr-ui.css ./samples/_static/css'];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {
               if (err) {
@@ -24,8 +21,8 @@ module.exports = (env) => {
             });
           }
         });
-      }
-    }
+      },
+    },
   ];
 
   return {
@@ -40,18 +37,17 @@ module.exports = (env) => {
               loader: 'file-loader',
               options: {
                 name: 'fr-ui.css',
-              }
+              },
             },
             {
               loader: 'sass-loader',
               options: {
                 sassOptions: {
-                  includePaths: [
-                    'node_modules/@forgerock/ui-design/src/scss'
-                  ]
-                }
-              }
-            }],
+                  includePaths: ['node_modules/@forgerock/ui-design/src/scss'],
+                },
+              },
+            },
+          ],
         },
       ],
     },
@@ -64,4 +60,4 @@ module.exports = (env) => {
     plugins,
     watch: isDev,
   };
-}
+};

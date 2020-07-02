@@ -4,12 +4,12 @@ coverage/
 lib/
 lib-esm/
 node_modules/
-e2e/site/fr-sdk-ui.js*
-e2e/site/index.js.map
-e2e/site/server.js
-samples/js
-samples/css
+tests/**/site/fr-sdk-ui.js*
+tests/**/site/index.js.map
+tests/**/site/server.js
+samples/_static/js/*.js*
+samples/_static/css/*.css*
+*.copy.*
 
 .DS_Store
-.env
 .vscode

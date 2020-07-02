@@ -2,7 +2,7 @@ const AM_HOSTNAME = 'https://default.iam.example.com';
 const AM_PATH = '/am';
 const AM_PORT = '';
 
-const APP_HOSTNAME = 'https://user.example.com';
+const APP_HOSTNAME = 'https://sdkapp.example.com';
 const APP_PORT = '8443';
 
 const CLIENT_ID = 'foo';
