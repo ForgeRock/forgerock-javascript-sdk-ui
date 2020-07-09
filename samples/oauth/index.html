@@ -36,6 +36,12 @@
       const url = new URL(window.location.href);
       const tree = url.searchParams.get('tree');
 
+      if (tree && tree.includes('{')) {
+        const errorText = 'Error: add your AM trees to this page\'s anchor tags.';
+        target.innerHTML = errorText;
+        console.log(errorText);
+      }
+
       forgerock.Config.set({
         clientId: '<Your OAuth Client>', // string; e.g. 'ForgeRockSDKClient'
         redirectUri: '<Your Redirect/Callback URL>', // string; e.g. 'https://user.example.com:8443/callback'
@@ -51,10 +57,12 @@
       const frui = new forgerock.FRUI();
 
       try {
-          const userInfo = await forgerock.FRUser.loginWithUI(frui);
-          target.innerHTML = `Success:<br/><pre>${JSON.stringify(userInfo, null, 4)}</pre>`;
+        const userInfo = await forgerock.FRUser.loginWithUI(frui);
+        target.innerHTML = `Success:<br/><pre>${JSON.stringify(userInfo, null, 4)}</pre>`;
       } catch (error) {
-          console.error(error);
+        const errorText = `${error}. Check your SDK configuration values.`;
+        console.error(errorText);
+        target.innerHTML = errorText;
       }
     }
     window.addEventListener('load', login);

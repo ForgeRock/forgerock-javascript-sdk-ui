@@ -1,7 +1,8 @@
-import { FRStep, FRWebAuthn, WebAuthnStepType } from '@forgerock/javascript-sdk';
+import { CallbackType, FRStep, FRWebAuthn, WebAuthnStepType } from '@forgerock/javascript-sdk';
 import { FRUIStepHandlerFactory } from '../interfaces';
 import { WebAuthnMode } from './enums';
 import BasicStepHandler from './handlers/basic';
+import DeviceStepHandler from './handlers/device-profile';
 import WebAuthnStepHandler from './handlers/webauthn';
 import { CallbackRendererFactory } from './interfaces';
 
@@ -26,6 +27,15 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
     const isAuth = webAuthnStepType === WebAuthnStepType.Authentication;
     const webAuthnMode = isAuth ? WebAuthnMode.Authentication : WebAuthnMode.Registration;
     return new WebAuthnStepHandler(target, step, webAuthnMode);
+  }
+
+  const deviceProfileStep = step.getCallbacksOfType(CallbackType.DeviceProfileCallback);
+  /**
+   * Check if Device Profile is the only callback.
+   * If it isn't, handle it within BasicStepHandler.
+   */
+  if (step.callbacks.length === 1 && deviceProfileStep.length === 1) {
+    return new DeviceStepHandler(target, step);
   }
 
   return new BasicStepHandler(target, step, rendererFactory);

@@ -8,7 +8,10 @@ module.exports = (env) => {
     {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-          const cmds = ['cpy ./bundles/fr-ui.css ./samples/_static/css'];
+          const cmds = [
+            'cpy ./bundles/fr-ui.css ./samples/_static/css',
+            'cpy ./bundles/fr-ui.css ./tests/e2e/app/_static/css',
+          ];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {
               if (err) {

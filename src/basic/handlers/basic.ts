@@ -3,6 +3,7 @@ import {
   CallbackType,
   ChoiceCallback,
   ConfirmationCallback,
+  DeviceProfileCallback,
   FRCallback,
   FRStep,
   KbaCreateCallback,
@@ -25,6 +26,7 @@ import {
 import BooleanAttributeCallbackRenderer from '../renderers/boolean';
 import ChoiceCallbackRenderer from '../renderers/choice';
 import ConfirmationCallbackRenderer from '../renderers/confirmation';
+import DeviceProfileCallbackRenderer from '../renderers/device-profile';
 import GenericCallbackRenderer from '../renderers/generic';
 import KbaCreateCallbackRenderer from '../renderers/kba-create';
 import PasswordCallbackRenderer from '../renderers/password';
@@ -147,6 +149,9 @@ class BasicStepHandler implements FRUIStepHandler {
 
       case CallbackType.ConfirmationCallback:
         return new ConfirmationCallbackRenderer(cb as ConfirmationCallback, index, this.onChange);
+
+      case CallbackType.DeviceProfileCallback:
+        return new DeviceProfileCallbackRenderer(cb as DeviceProfileCallback, this.onChange);
 
       case CallbackType.PasswordCallback:
         return new PasswordCallbackRenderer(cb as PasswordCallback, index, this.onChange);
