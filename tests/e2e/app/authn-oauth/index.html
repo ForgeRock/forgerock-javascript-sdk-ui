@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ForgeRock JavaScript SDK UI Samples</title>
+  <link rel="shortcut icon" href="../_static/img/fr-ico.png" type="image/png">
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Material+Icons">
+  <link rel="stylesheet" type="text/css" href="../_static/css/fr-ui.css">
+  <style>
+    body {
+      padding: 2rem;
+    }
+    .links {
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="fr-ui">Loading...</div>
+
+  <script src="../_static/js/fr-sdk-ui.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+  <script>
+    async function login() {
+      const targetId = 'fr-ui';
+      const target = document.getElementById(targetId);
+      const url = new URL(window.location.href);
+      const amUrl = url.searchParams.get('amUrl') || 'https://auth.example.com:9443/am';
+      const clientId = url.searchParams.get('clientId') || 'WebOAuthClient';
+      const realmPath = url.searchParams.get('realmPath') || 'root';
+      const scope = url.searchParams.get('scope') || 'openid profile me.read';
+      const un = url.searchParams.get('un') || '57a5b4e4-6999-4b45-bf86-a4f2e5d4b629';
+      const pw = url.searchParams.get('pw') || 'ieH034K&-zlwqh3V_';
+      const tree = url.searchParams.get('tree') || 'UsernamePassword';
+
+      forgerock.Config.set({
+        clientId,
+        redirectUri: `${url.origin}/_callback`,
+        scope,
+        serverConfig: {
+          baseUrl: amUrl,
+        },
+        realmPath,
+        tree,
+      });
+
+      const frui = new forgerock.FRUI();
+
+      try {
+          const userInfo = await forgerock.FRUser.loginWithUI(frui);
+          target.innerHTML = `Success:<br/><pre>${JSON.stringify(userInfo, null, 4)}</pre>`;
+      } catch (error) {
+          console.error(error);
+      }
+    }
+    window.addEventListener('load', login);
+  </script>
+</body>
+</html>
