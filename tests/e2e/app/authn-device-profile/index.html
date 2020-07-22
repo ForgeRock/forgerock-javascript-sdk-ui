@@ -44,8 +44,6 @@
       const frui = new forgerock.FRUI();
       const result = await frui.getSession();
 
-      console.log(result);
-
       if (result.type === 'LoginSuccess') {
         target.innerHTML = `Success:<br/>${result.getSessionToken()}<br/><br/>Logging out in 3 seconds...`;
         setTimeout(async () => {
