@@ -1,8 +1,15 @@
-import { CallbackType, FRStep, FRWebAuthn, WebAuthnStepType } from '@forgerock/javascript-sdk';
+import {
+  CallbackType,
+  FRStep,
+  FRRecoveryCodes,
+  FRWebAuthn,
+  WebAuthnStepType,
+} from '@forgerock/javascript-sdk';
 import { FRUIStepHandlerFactory } from '../interfaces';
 import { WebAuthnMode } from './enums';
 import BasicStepHandler from './handlers/basic';
 import DeviceStepHandler from './handlers/device-profile';
+import DisplayRecoveryCodes from './handlers/display-recovery-codes';
 import WebAuthnStepHandler from './handlers/webauthn';
 import { CallbackRendererFactory } from './interfaces';
 
@@ -27,6 +34,11 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
     const isAuth = webAuthnStepType === WebAuthnStepType.Authentication;
     const webAuthnMode = isAuth ? WebAuthnMode.Authentication : WebAuthnMode.Registration;
     return new WebAuthnStepHandler(target, step, webAuthnMode);
+  }
+
+  const isDisplayRecoveryCodesStep = FRRecoveryCodes.isDisplayStep(step); // returns boolean
+  if (isDisplayRecoveryCodesStep) {
+    return new DisplayRecoveryCodes(target, step);
   }
 
   const deviceProfileStep = step.getCallbacksOfType(CallbackType.DeviceProfileCallback);
