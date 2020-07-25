@@ -77,3 +77,7 @@ const frui = new forgerock.FRUI({
 });
 const result = await frui.getSession();
 ```
+
+## Version History
+
+[Our version history can be viewed by visiting our CHANGELOG.md](https://github.com/ForgeRock/forgerock-javascript-sdk-ui/blob/master/CHANGELOG.md).
