@@ -51,7 +51,12 @@ class GenericCallbackRenderer implements DestroyableCallbackRenderer, FocusableC
     // Add the input element
     this.input = el<HTMLInputElement>('input', 'form-control');
     this.input.id = `fr-callback-${this.index}`;
-    this.input.type = 'text';
+
+    if (this.callback.getType() === 'NumberAttributeInputCallback') {
+      this.input.type = 'number';
+    } else {
+      this.input.type = 'text';
+    }
     this.input.value = this.callback.getInputValue() as string;
     this.input.addEventListener('keyup', this.onInput);
     formLabelGroup.appendChild(this.input);
@@ -79,7 +84,14 @@ class GenericCallbackRenderer implements DestroyableCallbackRenderer, FocusableC
   };
 
   private onInput = (): void => {
-    this.callback.setInputValue(this.input.value);
+    let val: string | number;
+
+    if (this.callback.getType() === 'NumberAttributeInputCallback') {
+      val = Number(this.input.value);
+    } else {
+      val = this.input.value;
+    }
+    this.callback.setInputValue(val);
     this.onChange(this);
   };
 }
