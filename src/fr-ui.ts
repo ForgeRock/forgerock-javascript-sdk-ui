@@ -6,7 +6,7 @@ import {
   FRStep,
   StepType,
 } from '@forgerock/javascript-sdk';
-import { ConfigOptions } from 'index';
+import { ConfigOptions } from './index';
 import basicStepHandlerFactory from './basic';
 import { TARGET_ID } from './constants';
 import { FREventType } from './enums';

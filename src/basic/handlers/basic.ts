@@ -92,6 +92,7 @@ class BasicStepHandler implements FRUIStepHandler {
     }
 
     this.setHeader();
+    this.setDescription();
 
     // Render callbacks
     this.renderers = this.createRenderers();
@@ -124,6 +125,13 @@ class BasicStepHandler implements FRUIStepHandler {
     const h1 = this.container.querySelector('h1');
     if (h1) {
       h1.innerHTML = this.step.getHeader() || '';
+    }
+  };
+
+  private setDescription = (): void => {
+    const p = this.container.querySelector('p');
+    if (p) {
+      p.innerHTML = this.step.getDescription() || '';
     }
   };
 
