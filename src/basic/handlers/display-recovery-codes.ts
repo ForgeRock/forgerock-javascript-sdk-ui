@@ -4,7 +4,7 @@ import Deferred from '../../util/deferred';
 import { el } from '../../util/dom';
 import template from '../views/list.html';
 
-class DisplayRecoveryCodes implements FRUIStepHandler {
+class DisplayRecoveryCodesHandler implements FRUIStepHandler {
   private buttons!: HTMLDivElement;
   private header!: HTMLDivElement;
   private container!: HTMLDivElement;
@@ -58,4 +58,4 @@ class DisplayRecoveryCodes implements FRUIStepHandler {
   };
 }
 
-export default DisplayRecoveryCodes;
+export default DisplayRecoveryCodesHandler;
