@@ -1,5 +1,18 @@
 # Changelog
 
+## [unreleased]
+
+### Added
+
+- Support for the recovery code display node and the parsing of the codes from the TextOutputCallback
+- Updated support for new IDM nodes for registration and self-service
+- Added SuspendedTextOutputCallback support for the new Email Suspended Node
+
+### Fixed
+
+- Conditionally set user verification, relying party and allow credentials to WebAuthn key options
+- Improved instructions for cert creation for sample app
+
 ## [2.0.0]
 
 ### Added

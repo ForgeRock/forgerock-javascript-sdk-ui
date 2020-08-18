@@ -9,7 +9,8 @@ import { FRUIStepHandlerFactory } from '../interfaces';
 import { WebAuthnMode } from './enums';
 import BasicStepHandler from './handlers/basic';
 import DeviceStepHandler from './handlers/device-profile';
-import DisplayRecoveryCodes from './handlers/display-recovery-codes';
+import DisplayRecoveryCodesHandler from './handlers/display-recovery-codes';
+import EmailSuspendHandler from './handlers/email-suspend';
 import WebAuthnStepHandler from './handlers/webauthn';
 import { CallbackRendererFactory } from './interfaces';
 
@@ -38,7 +39,7 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
 
   const isDisplayRecoveryCodesStep = FRRecoveryCodes.isDisplayStep(step); // returns boolean
   if (isDisplayRecoveryCodesStep) {
-    return new DisplayRecoveryCodes(target, step);
+    return new DisplayRecoveryCodesHandler(target, step);
   }
 
   const deviceProfileStep = step.getCallbacksOfType(CallbackType.DeviceProfileCallback);
@@ -48,6 +49,11 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
    */
   if (step.callbacks.length === 1 && deviceProfileStep.length === 1) {
     return new DeviceStepHandler(target, step);
+  }
+
+  const emailSuspendStep = step.getCallbacksOfType(CallbackType.SuspendedTextOutputCallback);
+  if (emailSuspendStep.length) {
+    return new EmailSuspendHandler(target, step);
   }
 
   return new BasicStepHandler(target, step, rendererFactory);
