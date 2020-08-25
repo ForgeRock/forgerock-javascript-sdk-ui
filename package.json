@@ -1,6 +1,6 @@
 {
   "name": "@forgerock/javascript-sdk-ui",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "ForgeRock JavaScript SDK with UI rendering capability",
   "main": "./lib/",
   "module": "./lib-esm/",
@@ -15,8 +15,7 @@
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack --env.DEV=no",
     "build:e2e": "webpack --config ./tests/e2e/server/webpack.config.js",
     "clean": "shx rm -rf bundles docs lib lib-esm",
-    "clean:all": "npm run clean && shx rm -rf node_modules package-lock.json && git clean -fX",
-    "start": "webpack --env.DEV=yes",
+    "clean:all": "npm run clean && shx rm -rf node_modules package-lock.json && git clean -fX -e '!*.pem'",
     "lint": "eslint --ignore-path .gitignore '**/*.ts' --fix",
     "eslint-check": "eslint --print-config src/index.ts | eslint-config-prettier-check",
     "docs": "npm run docs:clean && npm run docs:gen",
@@ -24,11 +23,13 @@
     "docs:clean": "shx rm -rf docs",
     "docs:watch": "watch 'npm run docs' ./src",
     "start:e2e": "http-server ./tests/e2e/site -c1 -p 8443 --ssl --cert example.com+5.pem --key example.com+5-key.pem",
+    "start:e2e:app": "http-server ./tests/e2e/app -c1 -p 8443 --ssl --cert example.com+5.pem --key example.com+5-key.pem",
     "start:samples": "http-server ./samples -c1 -p 8443 --ssl --cert example.com+5.pem --key example.com+5-key.pem",
     "test": "npm run test:unit && npm run test:e2e",
     "test:e2e": "JEST_PUPPETEER_CONFIG='./tests/jest.puppeteer.config.js' jest --testMatch='<rootDir>/tests/e2e/**/*.test.ts' --config=./tests/jest.e2e.config.js",
     "test:integration": "jest --testMatch='<rootDir>/tests/integration/**/*.test.ts' --config=./tests/jest.basic.config.js",
-    "test:unit": "jest --testMatch='<rootDir>/src/**/*.test.ts' --config=./tests/jest.basic.config.js"
+    "test:unit": "jest --testMatch='<rootDir>/src/**/*.test.ts' --config=./tests/jest.basic.config.js",
+    "watch": "webpack --env.DEV=yes"
   },
   "husky": {
     "hooks": {
@@ -47,13 +48,13 @@
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
-    "@forgerock/javascript-sdk": "^2.0.0"
+    "@forgerock/javascript-sdk": "^2.1.0"
   },
   "devDependencies": {
     "@forgerock/ui-design": "^0.1.1",
     "@types/expect-puppeteer": "^3.3.3",
-    "@types/jest": "^24.0.23",
-    "@types/jest-environment-puppeteer": "^4.3.1",
+    "@types/jest": "^26.0.9",
+    "@types/jest-environment-puppeteer": "^4.3.2",
     "@types/puppeteer": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
@@ -76,7 +77,7 @@
     "raw-loader": "^3.1.0",
     "sass-loader": "^8.0.0",
     "shx": "^0.3.2",
-    "ts-jest": "^26.1.1",
+    "ts-jest": "^26.1.4",
     "tslint": "^5.20.0",
     "tslint-webpack-plugin": "^2.1.0",
     "typedoc": "^0.17.7",

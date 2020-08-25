@@ -20,12 +20,6 @@
 <body>
   <div id="fr-ui">Loading...</div>
 
-  <p class="links">
-    <a href="?tree={Your Registration Tree}">Register</a> |
-    <a href="?tree={Your UsernamePassword Tree}">Log in</a> |
-    <a href="?tree={Your WebAuthn Tree}">WebAuthn</a>
-  </p>
-
   <script src="../_static/js/fr-sdk-ui.js"></script>
   <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
   <script>
@@ -33,38 +27,37 @@
       const targetId = 'fr-ui';
       const target = document.getElementById(targetId);
       const url = new URL(window.location.href);
-      const tree = url.searchParams.get('tree');
-
-      if (tree && tree.includes('{')) {
-        const errorText = 'Error: add your AM trees to this page\'s anchor tags.';
-        target.innerHTML = errorText;
-        console.log(errorText);
-      }
+      const amUrl = url.searchParams.get('amUrl') || 'https://auth.example.com:9443/am';
+      const realmPath = url.searchParams.get('realmPath') || 'root';
+      const un = url.searchParams.get('un') || '57a5b4e4-6999-4b45-bf86-a4f2e5d4b629';
+      const pw = url.searchParams.get('pw') || 'ieH034K&-zlwqh3V_';
+      const tree = url.searchParams.get('tree') || 'LoginWithEmail';
+      const suspendedId = url.searchParams.get('suspendedId') || null;
 
       forgerock.Config.set({
         serverConfig: {
-          baseUrl: '<Your AM URL>', // string; e.g. 'https://openam.example.com:9443/openam/'
-          timeout: '<Your Timeout (milliseconds)>' // number; 90000 or less
+          baseUrl: amUrl,
         },
-        realmPath: '<Your Realm>', // string; e.g. 'root'
-        tree: tree || '<Your UsernamePassword Tree>', // string; e.g. 'UsernamePassword'; update hrefs above too!
+        realmPath,
+        tree,
       });
 
       const frui = new forgerock.FRUI();
-      const result = await frui.getSession();
-
-      console.log(result);
+      let options = {};
+      if (suspendedId) {
+        options.query = { suspendedId };
+      }
+      const result = await frui.getSession(options);
 
       if (result.type === 'LoginSuccess') {
         target.innerHTML = `Success:<br/>${result.getSessionToken()}<br/><br/>Logging out in 3 seconds...`;
         setTimeout(async () => {
           await forgerock.SessionManager.logout();
-          window.location.reload(true);
+          url.searchParams.delete('suspendedId');
+          window.location = url.toString();
         }, 3000);
       } else {
-        const errorText = `Error: ${result.getMessage()}. Check your SDK configuration values.`;
-        console.error(errorText);
-        target.innerHTML = errorText;
+        target.innerHTML = `Failure: ${result.getMessage()}`;
       }
     }
 

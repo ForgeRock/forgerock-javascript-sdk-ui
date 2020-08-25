@@ -20,6 +20,8 @@ module.exports = (env) => {
             'cpy ./bundles/index.js.map ./samples/_static/js --rename=fr-sdk-ui.js.map',
             'cpy ./bundles/index.js ./tests/e2e/site --rename=fr-sdk-ui.js',
             'cpy ./bundles/index.js.map ./tests/e2e/site --rename=fr-sdk-ui.js.map',
+            'cpy ./bundles/index.js ./tests/e2e/app/_static/js --rename=fr-sdk-ui.js',
+            'cpy ./bundles/index.js.map ./tests/e2e/app/_static/js --rename=fr-sdk-ui.js.map',
           ];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {

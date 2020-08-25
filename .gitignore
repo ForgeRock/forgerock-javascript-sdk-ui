@@ -8,8 +8,8 @@ tests/**/app/index.js*
 tests/**/site/fr-sdk-ui.js*
 tests/**/site/index.js.map
 tests/**/site/server.js
-samples/_static/js/*.js*
-samples/_static/css/*.css*
+**/_static/js/*.js*
+**/_static/css/*.css*
 *.copy.*
 *.pem
 

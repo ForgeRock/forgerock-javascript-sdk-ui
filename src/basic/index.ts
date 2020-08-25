@@ -1,7 +1,16 @@
-import { FRStep, FRWebAuthn, WebAuthnStepType } from '@forgerock/javascript-sdk';
+import {
+  CallbackType,
+  FRStep,
+  FRRecoveryCodes,
+  FRWebAuthn,
+  WebAuthnStepType,
+} from '@forgerock/javascript-sdk';
 import { FRUIStepHandlerFactory } from '../interfaces';
 import { WebAuthnMode } from './enums';
 import BasicStepHandler from './handlers/basic';
+import DeviceStepHandler from './handlers/device-profile';
+import DisplayRecoveryCodesHandler from './handlers/display-recovery-codes';
+import EmailSuspendHandler from './handlers/email-suspend';
 import WebAuthnStepHandler from './handlers/webauthn';
 import { CallbackRendererFactory } from './interfaces';
 
@@ -26,6 +35,25 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
     const isAuth = webAuthnStepType === WebAuthnStepType.Authentication;
     const webAuthnMode = isAuth ? WebAuthnMode.Authentication : WebAuthnMode.Registration;
     return new WebAuthnStepHandler(target, step, webAuthnMode);
+  }
+
+  const isDisplayRecoveryCodesStep = FRRecoveryCodes.isDisplayStep(step); // returns boolean
+  if (isDisplayRecoveryCodesStep) {
+    return new DisplayRecoveryCodesHandler(target, step);
+  }
+
+  const deviceProfileStep = step.getCallbacksOfType(CallbackType.DeviceProfileCallback);
+  /**
+   * Check if Device Profile is the only callback.
+   * If it isn't, handle it within BasicStepHandler.
+   */
+  if (step.callbacks.length === 1 && deviceProfileStep.length === 1) {
+    return new DeviceStepHandler(target, step);
+  }
+
+  const emailSuspendStep = step.getCallbacksOfType(CallbackType.SuspendedTextOutputCallback);
+  if (emailSuspendStep.length) {
+    return new EmailSuspendHandler(target, step);
   }
 
   return new BasicStepHandler(target, step, rendererFactory);
