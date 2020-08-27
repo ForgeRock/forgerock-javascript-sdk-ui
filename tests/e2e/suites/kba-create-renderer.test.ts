@@ -1,3 +1,13 @@
+/*
+ * @forgerock/javascript-sdk-ui
+ *
+ * kba-create-renderer.test.ts
+ *
+ * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 import { CallbackType, FRStep, KbaCreateCallback } from '@forgerock/javascript-sdk';
 import { ElementHandle } from 'puppeteer';
 import data from '../server/data';

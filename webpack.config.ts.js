@@ -4,11 +4,22 @@ const webpack = require('webpack');
 const TSLintPlugin = require('tslint-webpack-plugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
+const banner = `
+@forgerock/javascript-sdk
+
+index.js
+
+Copyright (c) ${new Date().getFullYear()} ForgeRock. All rights reserved.
+This software may be modified and distributed under the terms
+of the MIT license. See the LICENSE file for details.
+`;
+
 module.exports = (env) => {
   const isDev = env.DEV === 'yes';
 
   const plugins = [
     new webpack.WatchIgnorePlugin([/css\.d\.ts$/, /bundles|docs|lib|lib\-esm|samples/]),
+    new webpack.BannerPlugin(banner),
     new TSLintPlugin({
       files: ['./src/**/*.ts'],
     }),

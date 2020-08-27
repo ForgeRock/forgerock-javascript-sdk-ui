@@ -1,3 +1,13 @@
+/*
+ * @forgerock/javascript-sdk-ui
+ *
+ * constants.js
+ *
+ * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 const AM_HOSTNAME = 'https://default.iam.example.com';
 const AM_PATH = '/am';
 const AM_PORT = '';
