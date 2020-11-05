@@ -1,17 +1,23 @@
 const { exec } = require('child_process');
 const path = require('path');
 const webpack = require('webpack');
-const TSLintPlugin = require('tslint-webpack-plugin');
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
+
+const banner = `
+@forgerock/javascript-sdk
+
+index.js
+
+Copyright (c) ${new Date().getFullYear()} ForgeRock. All rights reserved.
+This software may be modified and distributed under the terms
+of the MIT license. See the LICENSE file for details.
+`;
 
 module.exports = (env) => {
   const isDev = env.DEV === 'yes';
 
   const plugins = [
     new webpack.WatchIgnorePlugin([/css\.d\.ts$/, /bundles|docs|lib|lib\-esm|samples/]),
-    new TSLintPlugin({
-      files: ['./src/**/*.ts'],
-    }),
+    new webpack.BannerPlugin(banner),
     {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
@@ -38,23 +44,6 @@ module.exports = (env) => {
       },
     },
   ];
-
-  if (!isDev) {
-    plugins.push(
-      new TypedocWebpackPlugin(
-        {
-          excludeExternals: true,
-          excludePrivate: true,
-          includeDeclarations: false,
-          ignoreCompilerErrors: true,
-          mode: 'modules',
-          name: 'ForgeRock JavaScript SDK UI',
-          out: '../docs',
-        },
-        './src',
-      ),
-    );
-  }
 
   return {
     devtool: isDev ? 'eval-source-map' : 'source-map',

@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.1] - 2020-09-24
+
+### Fixed
+
+- Added missing exported members to the `index.js` file
+
 ## [2.1.0] - 2020-08-25
 
 ### Added
