@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Fixed basic callback handler to better support unique page node callback composition: polling wait and message node within page node
+
 ## [2.1.1] - 2020-09-24
 
 ### Fixed

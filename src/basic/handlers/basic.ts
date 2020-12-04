@@ -204,24 +204,67 @@ class BasicStepHandler implements FRUIStepHandler {
     }
   };
 
+  // TODO: use `renderer` to identify what triggered the change
   private onChange = (): void => {
+    const callbacks = this.step.callbacks;
+    // If any renderer has an invalid value (input value length of 0), this will be false
     const isValid = this.isValid();
+    // Enables or disables button according to validity of renderer values
     this.setSubmitButton(isValid);
+    const pollingWaitCb = callbacks.find(
+      (x: FRCallback) => x.getType() === CallbackType.PollingWaitCallback,
+    );
+    /**
+     * A confirmation callback with a single value has a specific meaning
+     * that we need to handle.
+     * To allow the use of `getOptions`, the use of any is needed
+     */
+    // eslint-disable-next-line
+    const singleValueConfirmation = callbacks.find((x: any) => {
+      return x.getOptions && x.getOptions().length === 1;
+    });
 
     /**
-     * Automatically resolve if there's no submit button and a callback change occurs.
-     * This is expected for callbacks like polling wait.
+     * If Polling Wait is "exitable", it will come with a confirmation callback
+     * that has only one value. We don't want to block the autosubmission of
+     * the Polling Wait if it is exitable.
+     *
+     * Otherwise, automatically resolve/submit if there's no submit button,
+     * and all other renders are valid, and a callback change occurs.
      */
-    if (!this.submit && isValid) {
+    if (callbacks.length === 2 && pollingWaitCb && singleValueConfirmation) {
+      this.resolve();
+    } else if (!this.submit && isValid) {
       this.resolve();
     }
   };
 
   private requiresSubmitButton = (): boolean => {
-    const intersection = this.step.callbacks.filter((x) =>
+    const cbsNotNeedingSubmitBtn = this.step.callbacks.filter((x) =>
       this.callbacksThatDontRequireSubmitButton.includes(x.getType()),
     );
-    return intersection.length === 0;
+    const confirmationCbs = cbsNotNeedingSubmitBtn.filter(
+      (x: FRCallback) => x.getType() === CallbackType.ConfirmationCallback,
+    );
+    const hasMultipleRenderers = this.renderers.length > 1;
+
+    if (cbsNotNeedingSubmitBtn.length && hasMultipleRenderers) {
+      /**
+       * If ConfirmationCallback is present among others, return false.
+       * If any other *callback not requiring a submit button* is present,
+       * but if it's one of other callbacks, return true, which results
+       * in rendering a submit button.
+       */
+      return !confirmationCbs.length;
+    } else {
+      /**
+       * If there's a single callback not needing a submit button,
+       * return false. If there are no callbacks needing a submit
+       * button, return true, which results in the rendering of a
+       * submit button.
+       */
+      return !cbsNotNeedingSubmitBtn.length;
+    }
   };
 
   private createSubmitButton = (): HTMLButtonElement => {
@@ -234,7 +277,15 @@ class BasicStepHandler implements FRUIStepHandler {
   };
 
   private isValid = (): boolean => {
+    /**
+     * 1. Detect if the renderer itself, not this class, has an `isValid` method
+     * 2. If it doesn't have the above method, `isInvalid` results in false
+     * 3. If it does have an `isValid` method, run it
+     * 4. If the value is valid, set to true then flip it with `!` to false, so `isInvalid` is false
+     * 5. The one way `isInvalid` is true is if the renderer has isValid and the value's length is 0
+     */
     const isInvalid = (x: CallbackRenderer): boolean => x.isValid !== undefined && !x.isValid();
+    // Iterate through the renderers, if there is one invalid value return true, then flip to false
     return !this.renderers.some(isInvalid);
   };
 
