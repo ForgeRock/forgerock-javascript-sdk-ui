@@ -26,7 +26,7 @@
     <a href="?tree={Your WebAuthn Tree}">WebAuthn</a>
   </p>
 
-  <script src="../_static/js/fr-sdk-ui.js"></script>
+  <script src="../_static/js/index.js"></script>
   <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
   <script>
     /*
@@ -53,11 +53,11 @@
 
       forgerock.Config.set({
         serverConfig: {
-          baseUrl: '<Your AM URL>', // string; e.g. 'https://openam.example.com:9443/openam/'
-          timeout: '<Your Timeout (milliseconds)>' // number; 90000 or less
+          baseUrl: 'https://default.iam.example.com:51927/am/', // string; e.g. 'https://openam.example.com:9443/openam/'
+          timeout: 30000 // number; 90000 or less
         },
-        realmPath: '<Your Realm>', // string; e.g. 'root'
-        tree: tree || '<Your UsernamePassword Tree>', // string; e.g. 'UsernamePassword'; update hrefs above too!
+        realmPath: 'root', // string; e.g. 'root'
+        tree: tree || 'ConfirmationTest', // string; e.g. 'UsernamePassword'; update hrefs above too!
       });
 
       const frui = new forgerock.FRUI();
