@@ -45,7 +45,13 @@
       const target = document.getElementById(targetId);
       const url = new URL(window.location.href);
       const tree = url.searchParams.get('tree');
+      const suspendedId = url.searchParams.get('suspendedId');
+      const realmPath = url.searchParams.get('realm');
 
+      // Used for suspended email node
+      let options;
+
+      // Check to make sure appropriate trees have been added to the anchors
       if (tree && tree.includes('{')) {
         const errorText = 'Error: add your AM trees to this page\'s anchor tags.';
         target.innerHTML = errorText;
@@ -53,21 +59,30 @@
       }
 
       forgerock.Config.set({
-        clientId: 'WebOAuthClient', // string; e.g. 'ForgeRockSDKClient'
-        redirectUri: 'https://sdkapp.example.com:8443/_callback/', // string; e.g. 'https://sdkapp.example.com:8443/_callback'
-        scope: 'openid email profile', // string; e.g. 'openid profile me.read'
+        clientId: '<Your OAuth Client>', // string; e.g. 'ForgeRockSDKClient'
+        redirectUri: '<Your Redirect/Callback URL>', // string; e.g. 'https://sdkapp.example.com:8443/_callback'
+        scope: '<Your OAuth Scopes>', // string; e.g. 'openid profile me.read'
         serverConfig: {
-          baseUrl: 'https://default.iam.example.com:51927/am/', // string; e.g. 'https://openam.example.com:9443/openam/'
-          timeout: 30000 // number; 90000 or less
+          baseUrl: '<Your AM URL>', // string; e.g. 'https://openam.example.com:9443/openam/'
+          timeout: '<Your Timeout (milliseconds)>' // number; 90000 or less
         },
-        realmPath: 'root', // string; e.g. 'root'
-        tree: tree || 'Login', // string; e.g. 'Login'; update hrefs above too!
+        realmPath: realmPath || '<Your Realm>', // string; e.g. 'root'
+        tree: tree || '<Your UsernamePassword Tree>', // string; e.g. 'Login'; update hrefs above too!
       });
+
+      if (suspendedId) {
+        options = {
+          query: {
+            suspendedId,
+          },
+          realmPath,
+        };
+      }
 
       const frui = new forgerock.FRUI();
 
       try {
-        const userInfo = await forgerock.FRUser.loginWithUI(frui);
+        const userInfo = await forgerock.FRUser.loginWithUI(frui, options);
         target.innerHTML = `Success:<br/><pre>${JSON.stringify(userInfo, null, 4)}</pre>`;
       } catch (error) {
         const errorText = `${error}. Check your SDK configuration values.`;
