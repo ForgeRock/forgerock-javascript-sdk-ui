@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added email suspended node support in sample apps
+
 ### Fixed
 
 - Fixed basic callback handler to better support unique page node callback composition: polling wait and message node within page node
