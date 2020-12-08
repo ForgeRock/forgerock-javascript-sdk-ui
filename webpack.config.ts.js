@@ -22,12 +22,9 @@ module.exports = (env) => {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
           const cmds = [
-            'cpy ./bundles/index.js ./samples/_static/js --rename=fr-sdk-ui.js',
-            'cpy ./bundles/index.js.map ./samples/_static/js --rename=fr-sdk-ui.js.map',
-            'cpy ./bundles/index.js ./tests/e2e/site --rename=fr-sdk-ui.js',
-            'cpy ./bundles/index.js.map ./tests/e2e/site --rename=fr-sdk-ui.js.map',
-            'cpy ./bundles/index.js ./tests/e2e/app/_static/js --rename=fr-sdk-ui.js',
-            'cpy ./bundles/index.js.map ./tests/e2e/app/_static/js --rename=fr-sdk-ui.js.map',
+            'copyup ./bundles/index.js* ./samples/_static/js',
+            'copyup ./bundles/index.js* ./tests/e2e/site',
+            'copyup ./bundles/index.js* ./tests/e2e/app/_static/js',
           ];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {
@@ -46,9 +43,9 @@ module.exports = (env) => {
   ];
 
   return {
-    devtool: isDev ? 'eval-source-map' : 'source-map',
+    devtool: 'eval-source-map',
     entry: './src/index.ts',
-    mode: 'production',
+    mode: 'development',
     module: {
       rules: [
         {
@@ -66,7 +63,7 @@ module.exports = (env) => {
       ],
     },
     optimization: {
-      minimize: !isDev,
+      minimize: false,
     },
     output: {
       filename: 'index.js',

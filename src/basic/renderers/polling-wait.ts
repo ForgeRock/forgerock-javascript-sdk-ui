@@ -17,6 +17,7 @@ import { CallbackRenderer } from '../interfaces';
  * callback's wait time.
  */
 class PollingWaitCallbackRenderer implements CallbackRenderer {
+  private timeoutFinished = false;
   /**
    * @param callback The callback to render
    * @param index The index position in the step's callback array
@@ -27,6 +28,11 @@ class PollingWaitCallbackRenderer implements CallbackRenderer {
     private index: number,
     private onChange: (renderer: CallbackRenderer) => void,
   ) {}
+
+  /**
+   * Returns true if the timeout has completed.
+   */
+  public isValid = (): boolean => this.timeoutFinished;
 
   /**
    * Creates all required DOM elements and returns the containing element.
@@ -42,7 +48,10 @@ class PollingWaitCallbackRenderer implements CallbackRenderer {
    */
   public onInjected = (): void => {
     const waitTime = this.callback.getWaitTime();
-    window.setTimeout(() => this.onChange(this), waitTime);
+    window.setTimeout(() => {
+      this.timeoutFinished = true;
+      this.onChange(this);
+    }, waitTime);
   };
 }
 
