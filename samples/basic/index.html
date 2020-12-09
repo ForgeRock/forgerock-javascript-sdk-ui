@@ -22,9 +22,9 @@
   <div><p><form id="testing"></form></p></div>
 
   <p class="links">
-    <a href="?tree={Your Registration Tree}">Register</a> |
-    <a href="?tree={Your UsernamePassword Tree}">Log in</a> |
-    <a href="?tree={Your WebAuthn Tree}">WebAuthn</a>
+    <a href="?tree=FSecureRegistration">Register</a> |
+    <a href="?tree=FSecureLogin">Log in</a> |
+    <a href="?tree=WebAuthn">WebAuthn</a>
   </p>
 
   <script src="../_static/js/index.js"></script>
@@ -64,7 +64,7 @@
           timeout: 30000 // number; 90000 or less
         },
         realmPath: realmPath || 'root', // string; e.g. 'root'
-        tree: tree || 'stoyan', // string; e.g. 'UsernamePassword'; update hrefs above too!
+        tree: tree || 'FSecureLogin', // string; e.g. 'UsernamePassword'; update hrefs above too!
       });
 
       if (suspendedId) {
