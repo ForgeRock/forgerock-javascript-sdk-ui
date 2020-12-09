@@ -19,6 +19,7 @@
 
 <body>
   <div id="fr-ui">Loading...</div>
+  <div><p><form id="testing"></form></p></div>
 
   <p class="links">
     <a href="?tree={Your Registration Tree}">Register</a> |
@@ -59,11 +60,11 @@
 
       forgerock.Config.set({
         serverConfig: {
-          baseUrl: '<Your AM URL>', // string; e.g. 'https://openam.example.com:9443/openam/'
-          timeout: '<Your Timeout (milliseconds)>' // number; 90000 or less
+          baseUrl: 'https://default.forgeops.petrov.ca/am/', // string; e.g. 'https://openam.example.com:9443/openam/'
+          timeout: 30000 // number; 90000 or less
         },
-        realmPath: realmPath || '<Your Realm>', // string; e.g. 'root'
-        tree: tree || '<Your UsernamePassword Tree>', // string; e.g. 'UsernamePassword'; update hrefs above too!
+        realmPath: realmPath || 'root', // string; e.g. 'root'
+        tree: tree || 'stoyan', // string; e.g. 'UsernamePassword'; update hrefs above too!
       });
 
       if (suspendedId) {

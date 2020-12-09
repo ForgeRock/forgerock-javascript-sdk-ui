@@ -30,9 +30,15 @@ class TextOutputCallbackRenderer {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
 
     // Add the message
-    const p = el<HTMLParagraphElement>('p');
-    p.innerHTML = this.callback.getMessage();
-    formGroup.appendChild(p);
+    if (this.callback.getMessageType() === '4') {
+      const script = document.createElement('script');
+      script.text = this.callback.getMessage();
+      formGroup.appendChild(script);
+    } else {
+      const p = el<HTMLParagraphElement>('p');
+      p.innerHTML = this.callback.getMessage();
+      formGroup.appendChild(p);
+    }
 
     return formGroup;
   };
