@@ -114,7 +114,8 @@ class FRUI extends Dispatcher {
           if (!this.options.handlerFactory) {
             throw new Error('No handler factory is configured');
           }
-          this.handler = this.options.handlerFactory(this.el, thisStep);
+          const rendererOptions = this.options?.rendererOptions;
+          this.handler = this.options.handlerFactory(this.el, thisStep, undefined, rendererOptions);
           if (!this.handler) {
             throw new Error('Handler factory failed to produce a handler');
           }

@@ -24,7 +24,7 @@ import {
   TextOutputCallback,
   ValidatedCreatePasswordCallback,
 } from '@forgerock/javascript-sdk';
-import { FRUIStepHandler } from '../../interfaces';
+import { FRUIStepHandler, FRRendererOptions } from '../../interfaces';
 import Deferred from '../../util/deferred';
 import { el } from '../../util/dom';
 import {
@@ -78,6 +78,7 @@ class BasicStepHandler implements FRUIStepHandler {
     private target: HTMLElement,
     private step: FRStep,
     private rendererFactory?: CallbackRendererFactory,
+    private rendererOptions?: FRRendererOptions,
   ) {
     this.container = el('div');
     this.container.innerHTML = template;
@@ -189,7 +190,11 @@ class BasicStepHandler implements FRUIStepHandler {
         return new TermsAndConditionsCallbackRenderer(termsCallback, index, this.onChange);
 
       case CallbackType.TextOutputCallback:
-        return new TextOutputCallbackRenderer(cb as TextOutputCallback, index);
+        return new TextOutputCallbackRenderer(
+          cb as TextOutputCallback,
+          index,
+          this.rendererOptions?.dangerouslySetScriptText || false,
+        );
 
       case CallbackType.KbaCreateCallback:
         const kbaCreateCallback = cb as KbaCreateCallback;

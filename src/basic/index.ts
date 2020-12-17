@@ -15,7 +15,7 @@ import {
   FRWebAuthn,
   WebAuthnStepType,
 } from '@forgerock/javascript-sdk';
-import { FRUIStepHandlerFactory } from '../interfaces';
+import { FRRendererOptions, FRUIStepHandlerFactory } from '../interfaces';
 import { WebAuthnMode } from './enums';
 import BasicStepHandler from './handlers/basic';
 import DeviceStepHandler from './handlers/device-profile';
@@ -35,6 +35,7 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
   target: HTMLElement,
   step: FRStep,
   rendererFactory?: CallbackRendererFactory,
+  rendererOptions?: FRRendererOptions,
 ) => {
   if (!step) {
     throw new Error('Cannot create handler; no step specified');
@@ -66,7 +67,7 @@ const basicStepHandlerFactory: FRUIStepHandlerFactory = (
     return new EmailSuspendHandler(target, step);
   }
 
-  return new BasicStepHandler(target, step, rendererFactory);
+  return new BasicStepHandler(target, step, rendererFactory, rendererOptions);
 };
 
 export default basicStepHandlerFactory;

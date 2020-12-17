@@ -10,6 +10,7 @@
 
 import { FRLoginFailure, FRLoginSuccess, FRStep } from '@forgerock/javascript-sdk';
 import { FREventType } from './enums';
+import { CallbackRendererFactory } from './basic/interfaces';
 
 /**
  * Represents the final step type of authentication, which could be success or failure.
@@ -40,7 +41,12 @@ interface FRUIStepHandler {
  * Represents a factory that returns a step handler given a specific step.
  */
 interface FRUIStepHandlerFactory {
-  (el: HTMLElement, step: FRStep): FRUIStepHandler | undefined;
+  (
+    el: HTMLElement,
+    step: FRStep,
+    rendererFactory?: CallbackRendererFactory,
+    rendererOptions?: FRRendererOptions,
+  ): FRUIStepHandler | undefined;
 }
 
 /**
@@ -49,6 +55,7 @@ interface FRUIStepHandlerFactory {
 interface FRUIOptions {
   handlerFactory?: FRUIStepHandlerFactory;
   targetId?: string;
+  rendererOptions?: FRRendererOptions;
 }
 
 /**
@@ -56,6 +63,19 @@ interface FRUIOptions {
  */
 interface FREvent {
   type: FREventType;
+}
+
+/**
+ * Allows for configuring the behavior of the renderers
+ */
+interface FRRendererOptions {
+  /**
+   * Allows the SDK to handle TextOutputCallback messageType 4.
+   * This is considered an advanced callback that can have dangerous
+   * implications if not used carefully and correctly.
+   * DO NOT ENABLE THIS if you are not sure.
+   */
+  dangerouslySetScriptText?: boolean;
 }
 
 /**
@@ -69,6 +89,7 @@ export {
   FRAnyStep,
   FREndStep,
   FREvent,
+  FRRendererOptions,
   FRUIOptions,
   FRUIStepHandler,
   FRUIStepHandlerFactory,
