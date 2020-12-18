@@ -58,6 +58,7 @@ module.exports = (env) => {
       minimize: true,
     },
     output: {
+      filename: 'main.js',
       path: path.resolve('./bundles'),
     },
     plugins,

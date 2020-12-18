@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0] - 2020-12-18
+
+### Added
+
+- Added email suspended node support in sample apps
+- Added support for `TextOutputCallback` `messageType 4` behind a configuration option that is disabled by default
+- Support for TypeScript 4.0
+
+### Fixed
+
+- Fixed basic callback handler to better support unique page node callback composition: polling wait and message node within page node
+
 ## [2.1.1] - 2020-09-24
 
 ### Fixed

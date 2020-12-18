@@ -28,6 +28,7 @@ interface ConfirmationButton {
 class ConfirmationCallbackRenderer
   implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private buttons!: ConfirmationButton[];
+  private wasClicked = false;
 
   /**
    * @param callback The callback to render
@@ -52,6 +53,11 @@ class ConfirmationCallbackRenderer
    * Sets the focus on the first button.
    */
   public focus = (): void => this.buttons[0].element.focus();
+
+  /**
+   * Returns true if the dropdown has a value selected.
+   */
+  public isValid = (): boolean => this.wasClicked;
 
   /**
    * Creates all required DOM elements and returns the containing element.
@@ -82,6 +88,7 @@ class ConfirmationCallbackRenderer
   };
 
   private onInput = (index: number): void => {
+    this.wasClicked = true;
     this.callback.setInputValue(index);
     this.onChange(this);
   };

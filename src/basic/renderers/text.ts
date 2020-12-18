@@ -21,7 +21,11 @@ class TextOutputCallbackRenderer {
    * @param index The index position in the step's callback array
    * @param onChange A function to call when the callback value is changed
    */
-  constructor(private callback: TextOutputCallback, private index: number) {}
+  constructor(
+    private callback: TextOutputCallback,
+    private index: number,
+    private dangerouslySetScriptText: boolean,
+  ) {}
 
   /**
    * Creates all required DOM elements and returns the containing element.
@@ -30,9 +34,20 @@ class TextOutputCallbackRenderer {
     const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
 
     // Add the message
-    const p = el<HTMLParagraphElement>('p');
-    p.innerHTML = this.callback.getMessage();
-    formGroup.appendChild(p);
+    if (this.dangerouslySetScriptText && this.callback.getMessageType() === '4') {
+      const script = document.createElement('script');
+      script.text = this.callback.getMessage();
+      formGroup.appendChild(script);
+    } else if (this.callback.getMessageType() === '4') {
+      console.warn(
+        'TextOutputCallback messageType 4 is not supported by default. ' +
+          'Enable this in the rendererOptions if you want to support this.',
+      );
+    } else {
+      const p = el<HTMLParagraphElement>('p');
+      p.innerHTML = this.callback.getMessage();
+      formGroup.appendChild(p);
+    }
 
     return formGroup;
   };
