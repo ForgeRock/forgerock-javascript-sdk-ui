@@ -6,7 +6,7 @@ lib-esm/
 node_modules/
 tests/**/app/index.js*
 tests/**/site/fr-sdk-ui.js*
-tests/**/site/index.js.map
+tests/**/site/index.js*
 tests/**/site/server.js
 **/_static/js/*.js*
 **/_static/css/*.css*
