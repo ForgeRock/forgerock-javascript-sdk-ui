@@ -15,7 +15,7 @@ import { CallbackRendererFactory } from './basic/interfaces';
 /**
  * Represents the final step type of authentication, which could be success or failure.
  */
-type FREndStep = FRLoginSuccess | FRLoginFailure;
+type FREndStep = FRLoginSuccess | FRLoginFailure | void;
 
 /**
  * Represents any step type of authentication, including the final step type.

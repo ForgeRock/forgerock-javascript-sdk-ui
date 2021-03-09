@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Social Login support
+
+### Fixed
+
+- Fixed build issue with Windows PowerShell
+
 ## [2.2.0] - 2020-12-18
 
 ### Added
