@@ -3,7 +3,7 @@
  *
  * basic.ts
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2020-2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -20,6 +20,7 @@ import {
   PasswordCallback,
   PollingWaitCallback,
   ReCaptchaCallback,
+  SelectIdPCallback,
   TermsAndConditionsCallback,
   TextOutputCallback,
   ValidatedCreatePasswordCallback,
@@ -42,6 +43,7 @@ import KbaCreateCallbackRenderer from '../renderers/kba-create';
 import PasswordCallbackRenderer from '../renderers/password';
 import PollingWaitCallbackRenderer from '../renderers/polling-wait';
 import ReCaptchaCallbackRenderer from '../renderers/recaptcha';
+import SelectIdPCallbackRenderer from '../renderers/select-idp';
 import TermsAndConditionsCallbackRenderer from '../renderers/terms';
 import TextOutputCallbackRenderer from '../renderers/text';
 import template from '../views/form.html';
@@ -58,8 +60,8 @@ class BasicStepHandler implements FRUIStepHandler {
   private callbacksThatDontRequireSubmitButton = [
     CallbackType.ConfirmationCallback,
     CallbackType.PollingWaitCallback,
-    // TODO: Update when core SDK supports this callback type
-    'RedirectCallback',
+    CallbackType.RedirectCallback,
+    CallbackType.SelectIdPCallback,
   ];
 
   /**
@@ -172,18 +174,38 @@ class BasicStepHandler implements FRUIStepHandler {
       case CallbackType.DeviceProfileCallback:
         return new DeviceProfileCallbackRenderer(cb as DeviceProfileCallback, this.onChange);
 
+      case CallbackType.KbaCreateCallback:
+        const kbaCreateCallback = cb as KbaCreateCallback;
+        const kbaIndex = this.step
+          .getCallbacksOfType<KbaCreateCallback>(CallbackType.KbaCreateCallback)
+          .filter((x) => x.getPrompt() === kbaCreateCallback.getPrompt())
+          .indexOf(kbaCreateCallback);
+        return new KbaCreateCallbackRenderer(kbaCreateCallback, index, kbaIndex, this.onChange);
+
       case CallbackType.PasswordCallback:
         return new PasswordCallbackRenderer(cb as PasswordCallback, index, this.onChange);
-
-      case CallbackType.ValidatedCreatePasswordCallback:
-        const passwordCallback = cb as ValidatedCreatePasswordCallback;
-        return new PasswordCallbackRenderer(passwordCallback, index, this.onChange);
 
       case CallbackType.PollingWaitCallback:
         return new PollingWaitCallbackRenderer(cb as PollingWaitCallback, index, this.onChange);
 
       case CallbackType.ReCaptchaCallback:
         return new ReCaptchaCallbackRenderer(cb as ReCaptchaCallback, index, this.onChange);
+
+      case CallbackType.SelectIdPCallback:
+        /**
+         * If either of the username collection callbacks are present,
+         * we assume a local authentication form is present
+         */
+        const hasLocalAuthForm =
+          !!this.step.getCallbacksOfType(CallbackType.NameCallback).length ||
+          !!this.step.getCallbacksOfType(CallbackType.ValidatedCreateUsernameCallback).length;
+
+        return new SelectIdPCallbackRenderer(
+          cb as SelectIdPCallback,
+          index,
+          this.onChange,
+          hasLocalAuthForm,
+        );
 
       case CallbackType.TermsAndConditionsCallback:
         const termsCallback = cb as TermsAndConditionsCallback;
@@ -196,29 +218,22 @@ class BasicStepHandler implements FRUIStepHandler {
           this.rendererOptions?.dangerouslySetScriptText || false,
         );
 
-      case CallbackType.KbaCreateCallback:
-        const kbaCreateCallback = cb as KbaCreateCallback;
-        const kbaIndex = this.step
-          .getCallbacksOfType<KbaCreateCallback>(CallbackType.KbaCreateCallback)
-          .filter((x) => x.getPrompt() === kbaCreateCallback.getPrompt())
-          .indexOf(kbaCreateCallback);
-        return new KbaCreateCallbackRenderer(kbaCreateCallback, index, kbaIndex, this.onChange);
+      case CallbackType.ValidatedCreatePasswordCallback:
+        const passwordCallback = cb as ValidatedCreatePasswordCallback;
+        return new PasswordCallbackRenderer(passwordCallback, index, this.onChange);
 
       default:
         return new GenericCallbackRenderer(cb, index, this.onChange);
     }
   };
 
-  // TODO: use `renderer` to identify what triggered the change
-  private onChange = (): void => {
+  private onChange = (renderer?: CallbackRenderer): void => {
     const callbacks = this.step.callbacks;
-    // If any renderer has an invalid value (input value length of 0), this will be false
-    const isValid = this.isValid();
-    // Enables or disables button according to validity of renderer values
-    this.setSubmitButton(isValid);
+    const rendererClassname = renderer?.constructor.name;
     const pollingWaitCb = callbacks.find(
       (x: FRCallback) => x.getType() === CallbackType.PollingWaitCallback,
     );
+
     /**
      * A confirmation callback with a single value has a specific meaning
      * that we need to handle.
@@ -228,6 +243,51 @@ class BasicStepHandler implements FRUIStepHandler {
     const singleValueConfirmation = callbacks.find((x: any) => {
       return x.getOptions && x.getOptions().length === 1;
     });
+
+    /**
+     * A SelectIdPCallback with local authentication form is a special combo
+     */
+    const socialLoginWithLocal = (): boolean => {
+      let hasSelectIdP = false;
+      let hasLocalForm = false;
+
+      callbacks.forEach((x: FRCallback) => {
+        switch (x.getType()) {
+          case CallbackType.SelectIdPCallback:
+            hasSelectIdP = true;
+            break;
+          case CallbackType.NameCallback:
+            hasLocalForm = true;
+            break;
+          case CallbackType.ValidatedCreateUsernameCallback:
+            hasLocalForm = true;
+            break;
+          default:
+          // Intentionally left empty
+        }
+      });
+
+      return hasSelectIdP && hasLocalForm;
+    };
+
+    if (socialLoginWithLocal() && rendererClassname !== 'SelectIdPCallbackRenderer') {
+      /**
+       * If Local Authentication form is combined with Social Login Providers, and
+       * local inputs are used, this signals the use of the local auth, so set
+       * localAuthentication as provider on the SelectIdPCallback before resolving
+       */
+      const selectIdPRenderer = this.renderers.find((x) => {
+        return x.constructor.name === 'SelectIdPCallbackRenderer';
+      });
+      // eslint-disable-next-line
+      // @ts-ignore
+      selectIdPRenderer.onOtherInput('localAuthentication');
+    }
+
+    // If any renderer has an invalid value (input value length of 0), this will be false
+    const isValid = this.isValid();
+    // Enables or disables button according to validity of renderer values
+    this.setSubmitButton(isValid);
 
     /**
      * If Polling Wait is "exitable", it will come with a confirmation callback
@@ -241,12 +301,14 @@ class BasicStepHandler implements FRUIStepHandler {
       this.resolve();
     } else if (!this.submit && isValid) {
       this.resolve();
+    } else if (rendererClassname === 'SelectIdPCallbackRenderer') {
+      this.resolve();
     }
   };
 
   private requiresSubmitButton = (): boolean => {
     const cbsNotNeedingSubmitBtn = this.step.callbacks.filter((x) =>
-      this.callbacksThatDontRequireSubmitButton.includes(x.getType()),
+      this.callbacksThatDontRequireSubmitButton.includes(x.getType() as CallbackType),
     );
     const confirmationCbs = cbsNotNeedingSubmitBtn.filter(
       (x: FRCallback) => x.getType() === CallbackType.ConfirmationCallback,
@@ -264,7 +326,7 @@ class BasicStepHandler implements FRUIStepHandler {
     } else {
       /**
        * If there's a single callback not needing a submit button,
-       * return false. If there are no callbacks needing a submit
+       * return false. If there are no callbacks NOT needing a submit
        * button, return true, which results in the rendering of a
        * submit button.
        */
@@ -277,7 +339,9 @@ class BasicStepHandler implements FRUIStepHandler {
     button.disabled = !this.isValid();
     button.id = 'fr-submit';
     button.innerText = 'Next';
-    button.addEventListener('click', this.resolve);
+    button.addEventListener('click', () => {
+      this.resolve();
+    });
     return button;
   };
 
@@ -301,6 +365,7 @@ class BasicStepHandler implements FRUIStepHandler {
   };
 
   private resolve = (): void => {
+    // Continue with cleaning up and resolving step
     this.renderers
       .filter((x) => !!x.destroy)
       .forEach((x) => (x as DestroyableCallbackRenderer).destroy());
