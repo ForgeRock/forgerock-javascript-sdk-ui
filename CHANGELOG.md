@@ -4,7 +4,7 @@
 
 ### Added
 
-- Social Login support
+- Social Login support.
 
 ### Fixed
 
