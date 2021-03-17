@@ -18,5 +18,6 @@ module.exports = {
   collectCoverageFrom,
   globals,
   testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/e2e/**/*.test.ts'],
+  reporters: ['default', ['jest-junit', { outputDirectory: `reports/${Date.now()}`, suiteNameTemplate: "{filename}", classNameTemplate: "{filename}", includeConsoleOutput: true} ]],
   rootDir,
 };

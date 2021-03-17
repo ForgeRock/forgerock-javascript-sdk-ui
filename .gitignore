@@ -10,6 +10,7 @@ tests/**/site/index.js*
 tests/**/site/server.js
 **/_static/js/*.js*
 **/_static/css/*.css*
+reports/*
 *.copy.*
 *.pem
 
