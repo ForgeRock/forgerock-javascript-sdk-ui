@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-const { collectCoverageFrom, globals, rootDir } = require('./jest.basic.config');
+const { collectCoverageFrom, globals, reporters, rootDir } = require('./jest.basic.config');
 const tsPreset = require('ts-jest/jest-preset');
 const puppeteerPreset = require('jest-puppeteer/jest-preset');
 
@@ -18,6 +18,6 @@ module.exports = {
   collectCoverageFrom,
   globals,
   testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/e2e/**/*.test.ts'],
-  reporters: ['default', ['jest-junit', { outputDirectory: `reports/${Date.now()}`, suiteNameTemplate: "{filename}", classNameTemplate: "{filename}", includeConsoleOutput: true} ]],
+  reporters,
   rootDir,
 };
