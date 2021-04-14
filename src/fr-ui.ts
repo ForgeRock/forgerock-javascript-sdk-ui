@@ -88,7 +88,7 @@ class FRUI extends Dispatcher {
     let thisStep;
 
     try {
-      if (options?.query.code && options?.query.state) {
+      if ((options?.query.code && options?.query.state) || options?.query.form_post_entry) {
         thisStep = await FRAuth.resume(window.location.href, options);
       } else {
         thisStep = await FRAuth.next(previousStep, options);

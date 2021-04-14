@@ -32,6 +32,7 @@
       const target = document.getElementById(targetId);
       const url = new URL(window.location.href);
       const code = url.searchParams.get('code');
+      const form_post_entry = url.searchParams.get('form_post_entry');
       const un = url.searchParams.get('un') || '57a5b4e4-6999-4b45-bf86-a4f2e5d4b629';
       const pw = url.searchParams.get('pw') || 'ieH034K&-zlwqh3V_';
       const state = url.searchParams.get('state');
@@ -42,7 +43,7 @@
       let tree = url.searchParams.get('tree') || 'IDMSocialLogin';
 
       let options;
-      if (code && state) {
+      if ((code && state) || form_post_entry) {
         // Below six lines for return params are needed for automation only
         const returnParamsString = window.localStorage.getItem('returnParams');
         window.localStorage.removeItem('returnParams');
@@ -54,8 +55,9 @@
         // Create options object to pass code and state to AM
         options = {
           query: {
-            code,
-            state,
+            ...(code && { code }),
+            ...(state && { state }),
+            ...(form_post_entry && { form_post_entry }),
           }
         };
       } else {
