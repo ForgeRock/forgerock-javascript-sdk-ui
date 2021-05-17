@@ -21,7 +21,6 @@
     "docs": "npm run docs:clean && npm run docs:gen",
     "docs:gen": "typedoc --mode file ./src",
     "docs:clean": "shx rm -rf docs",
-    "docs:watch": "watch \"npm run docs\" ./src",
     "start:e2e": "http-server ./tests/e2e/site -c1 -p 8443 --ssl --cert example.com+5.pem --key example.com+5-key.pem",
     "start:e2e:app": "http-server ./tests/e2e/app -c1 -p 8443 --ssl --cert example.com+5.pem --key example.com+5-key.pem",
     "start:samples": "http-server ./samples -c1 -p 8443 --ssl --cert example.com+5.pem --key example.com+5-key.pem",
@@ -76,13 +75,12 @@
     "prettier": "^2.0.5",
     "puppeteer": "^2.0.0",
     "raw-loader": "^4.0.2",
-    "sass-loader": "^8.0.0",
+    "sass-loader": "^11.1.1",
     "shx": "^0.3.2",
     "ts-jest": "^26.1.4",
     "ts-loader": "^8.0.17",
     "typedoc": "^0.17.7",
     "typescript": "^4.0.0",
-    "watch": "^1.0.2",
     "webpack": "^5.24.4",
     "webpack-cli": "^4.5.0"
   }

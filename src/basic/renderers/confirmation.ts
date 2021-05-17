@@ -26,7 +26,8 @@ interface ConfirmationButton {
  * Renders a message and a set of buttons, one for each option in the callback.
  */
 class ConfirmationCallbackRenderer
-  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer
+{
   private buttons!: ConfirmationButton[];
   private wasClicked = false;
 
