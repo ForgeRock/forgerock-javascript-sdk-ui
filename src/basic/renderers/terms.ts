@@ -21,7 +21,8 @@ import {
  * that indicates agreement.
  */
 class TermsAndConditionsCallbackRenderer
-  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer
+{
   private input!: HTMLInputElement;
 
   /**

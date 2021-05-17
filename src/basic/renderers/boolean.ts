@@ -21,7 +21,8 @@ import { renderErrors } from './errors';
  * Renders a labeled checkbox and any policy failure messages.
  */
 class BooleanAttributeCallbackRenderer
-  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer
+{
   private input!: HTMLInputElement;
 
   /**
