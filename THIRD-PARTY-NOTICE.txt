@@ -1,0 +1,246 @@
+This project uses the following third party libraries:
+
+@types/expect-puppeteer
+-----------------------
+TypeScript type definitions expect-puppeteer
+
+- Project: https://github.com/DefinitelyTyped/DefinitelyTyped
+- License: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/LICENSE
+
+@types/jest
+-----------------------
+TypeScript type definitions for Jest
+
+- Project: https://github.com/DefinitelyTyped/DefinitelyTyped
+- License: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/LICENSE
+
+@types/jest-environment-puppeteer
+-----------------------
+TypeScript type definitions for jest-environment-puppeteer
+
+- Project: https://github.com/DefinitelyTyped/DefinitelyTyped
+- License: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/LICENSE
+
+@types/puppeteer
+-----------------------
+TypeScript type definitions Puppeteer
+
+- Project: https://github.com/DefinitelyTyped/DefinitelyTyped
+- License: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/LICENSE
+
+@typescript-eslint/eslint-plugin
+-----------------------
+TypeScript plugin for ESLint
+
+- Project: https://github.com/typescript-eslint/typescript-eslint
+- License: https://github.com/typescript-eslint/typescript-eslint#license
+
+@typescript-eslint/parser
+-----------------------
+TypeScript parser for ESLint
+
+- Project: https://github.com/typescript-eslint/typescript-eslint
+- License: https://github.com/typescript-eslint/typescript-eslint#license
+
+@typescript-eslint/typescript-estree
+-----------------------
+TypeScript utility for ESLint
+
+- Project: https://github.com/typescript-eslint/typescript-eslint
+- License: ehttps://github.com/typescript-eslint/typescript-eslint#license
+
+autoprefixer
+-----------------------
+Adds browser CSS prefixes to expand browser support
+
+- Project: https://github.com/postcss/autoprefixer
+- License: https://github.com/postcss/autoprefixer/blob/main/LICENSE
+
+bootstrap
+-----------------------
+CSS framework for easy prototyping
+
+- Project: https://github.com/twbs/bootstrap
+- License: https://github.com/twbs/bootstrap/blob/main/LICENSE
+
+copyfiles
+-----------------------
+Copy files on the command line
+
+- Project: https://github.com/calvinmetcalf/copyfiles
+- License: https://github.com/calvinmetcalf/copyfiles/blob/master/license.md
+
+cpy-cli
+-----------------------
+Node helper for copying files
+
+- Project: https://github.com/sindresorhus/cpy-cli
+- License: https://github.com/sindresorhus/cpy-cli/blob/main/license
+
+eslint
+-----------------------
+Find and fix problems in your JavaScript code
+
+- Project: https://github.com/eslint/eslint
+- License: https://github.com/eslint/eslint/blob/master/LICENSE
+
+eslint-config-prettier
+-----------------------
+Turns off all rules that are unnecessary or might conflict with Prettier
+
+- Project: https://github.com/prettier/eslint-config-prettier
+- License: https://github.com/prettier/eslint-config-prettier/blob/main/LICENSE
+
+eslint-plugin-prettier
+-----------------------
+ESLint plugin for Prettier formatting
+
+- Project: https://github.com/prettier/eslint-plugin-prettier
+- License: https://github.com/prettier/eslint-plugin-prettier/blob/master/LICENSE.md
+
+file-loader
+-----------------------
+The file-loader resolves import/require() on a file into a url and emits the file into the output directory
+
+- Project: https://github.com/webpack-contrib/file-loader
+- License: https://github.com/webpack-contrib/file-loader/blob/master/LICENSE
+
+http-server
+-----------------------
+A simple zero-configuration command-line http server
+
+- Project: https://github.com/http-party/http-server
+- License: https://github.com/http-party/http-server/blob/master/LICENSE
+
+husky
+-----------------------
+Modern native Git hooks made easy
+
+- Project: https://github.com/typicode/husky
+- License: https://github.com/typicode/husky/blob/main/LICENSE
+
+jest
+-----------------------
+Delightful JavaScript Testing
+
+- Project: https://github.com/facebook/jest
+- License: https://github.com/facebook/jest/blob/master/LICENSE
+
+jest-junit
+-----------------------
+A Jest reporter that creates compatible JUnit xml files
+
+- Project: https://github.com/jest-community/jest-junit
+- License: https://github.com/jest-community/jest-junit/blob/master/LICENSE
+
+jest-puppeteer
+-----------------------
+Run your tests using Jest & Puppeteer
+
+- Project: https://github.com/smooth-code/jest-puppeteer
+- License: https://github.com/smooth-code/jest-puppeteer/blob/master/LICENSE
+
+postcss
+-----------------------
+Processes CSS after compilation from SCSS or Less
+
+- Project: https://github.com/postcss/postcss
+- License: https://github.com/postcss/postcss/blob/main/LICENSE
+
+postcss-loader
+-----------------------
+Plugin for Webpack for running PostCSS
+
+- Project: https://github.com/webpack-contrib/postcss-loader
+- License: https://github.com/webpack-contrib/postcss-loader/blob/master/LICENSE
+
+miragejs
+-----------------------
+A client-side server to build, test and share your JavaScript app
+
+- Project: https://github.com/miragejs/miragejs
+- License: https://github.com/miragejs/miragejs/blob/master/LICENSE.md
+
+node-sass
+-----------------------
+Node.js bindings to libsass
+
+- Project: https://github.com/sass/node-sass
+- License: https://github.com/sass/node-sass/blob/master/LICENSE
+
+prettier
+-----------------------
+Prettier is an opinionated code formatter
+
+- Project: https://github.com/prettier/prettier
+- License: https://github.com/prettier/prettier/blob/main/LICENSE
+
+puppeteer
+-----------------------
+Headless Chrome Node.js API
+
+- Project: https://github.com/puppeteer/puppeteer
+- License: https://github.com/puppeteer/puppeteer/blob/main/LICENSE
+
+raw-loader
+-----------------------
+A loader for webpack that allows importing files as a String
+
+- Project: https://github.com/webpack-contrib/raw-loader
+- License: https://github.com/webpack-contrib/raw-loader/blob/master/LICENSE
+
+sass-loader
+-----------------------
+Compiles Sass to CSS
+
+- Project: https://github.com/webpack-contrib/sass-loader
+- License: https://github.com/webpack-contrib/sass-loader/blob/master/LICENSE
+
+shx
+-----------------------
+Portable Shell Commands for Node
+
+- Project: https://github.com/shelljs/shx
+- License: https://github.com/shelljs/shx/blob/master/LICENSE
+
+ts-jest
+-----------------------
+A Jest transformer that lets you use Jest to test projects written in TypeScript
+
+- Project: https://github.com/kulshekhar/ts-jest
+- License: https://github.com/kulshekhar/ts-jest/blob/master/LICENSE.md
+
+ts-loader
+-----------------------
+TypeScript loader for webpack
+
+- Project: https://github.com/TypeStrong/ts-loader
+- License: https://github.com/TypeStrong/ts-loader/blob/main/LICENSE
+
+typedoc
+-----------------------
+Documentation generator for TypeScript projects
+
+- Project: https://github.com/TypeStrong/typedoc
+- License: https://github.com/TypeStrong/typedoc/blob/master/LICENSE
+
+typescript
+-----------------------
+A compile to JavaScript type safe language
+
+- Project: https://github.com/microsoft/TypeScript
+- License: https://github.com/microsoft/TypeScript/blob/master/LICENSE.txt
+
+webpack
+-----------------------
+Bundling tool for modular JavaScript
+
+- Project: https://github.com/webpack/webpack
+- License: https://github.com/webpack/webpack/blob/master/LICENSE
+
+webpack-cli
+-----------------------
+CLI extension to Webpack
+
+- Project: https://github.com/webpack/webpack-cli
+- License: https://github.com/webpack/webpack-cli/blob/master/LICENSE
