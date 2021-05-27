@@ -50,7 +50,6 @@
     "@forgerock/javascript-sdk": "../forgerock-javascript-sdk"
   },
   "devDependencies": {
-    "@forgerock/ui-design": "^0.1.1",
     "@types/expect-puppeteer": "^3.3.3",
     "@types/jest": "^26.0.13",
     "@types/jest-environment-puppeteer": "4.3.2",
@@ -58,7 +57,8 @@
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "@typescript-eslint/typescript-estree": "^4.17.0",
-    "bootstrap": "^4.4.1",
+    "autoprefixer": "^10.2.6",
+    "bootstrap": "^5.0.1",
     "copyfiles": "^2.1.1",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.22.0",
@@ -72,6 +72,8 @@
     "jest-puppeteer": "^4.4.0",
     "miragejs": "^0.1.32",
     "node-sass": "^4.14.1",
+    "postcss": "^8.3.0",
+    "postcss-loader": "^5.3.0",
     "prettier": "^2.0.5",
     "puppeteer": "^2.0.0",
     "raw-loader": "^4.0.2",

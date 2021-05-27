@@ -46,7 +46,7 @@ class ReCaptchaCallbackRenderer implements CallbackRenderer {
    * Creates all required DOM elements and returns the containing element.
    */
   public render = (): HTMLDivElement => {
-    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
+    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group mb-3`);
     formGroup.appendChild(this.container);
     return formGroup;
   };

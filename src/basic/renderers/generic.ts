@@ -3,7 +3,7 @@
  *
  * generic.ts
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2020-2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -54,8 +54,8 @@ class GenericCallbackRenderer implements DestroyableCallbackRenderer, FocusableC
    */
   public render = (): HTMLDivElement => {
     // Create basic structure
-    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
-    const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group');
+    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group mb-3`);
+    const formLabelGroup = el<HTMLDivElement>('div', 'form-floating form-label-group');
     formGroup.appendChild(formLabelGroup);
 
     // Add the input element
