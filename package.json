@@ -1,6 +1,6 @@
 {
   "name": "@forgerock/javascript-sdk-ui",
-  "version": "2.2.0",
+  "version": "3.0.0-beta1",
   "description": "ForgeRock JavaScript SDK with UI rendering capability",
   "main": "./lib/",
   "module": "./lib-esm/",
@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
-    "@forgerock/javascript-sdk": "../forgerock-javascript-sdk"
+    "@forgerock/javascript-sdk": "^3.0.0-beta1"
   },
   "devDependencies": {
     "@types/expect-puppeteer": "^3.3.3",
