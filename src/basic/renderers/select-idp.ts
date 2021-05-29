@@ -123,7 +123,7 @@ class SelectIdPCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
         const handler = (): void => {
           this.onInput(x.provider);
         };
-        const element = el<HTMLButtonElement>('button', 'btn btn-social mt-3');
+        const element = el<HTMLButtonElement>('button', 'btn btn-light btn-social mt-3');
         let htmlStr;
 
         if (x.uiConfig) {

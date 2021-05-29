@@ -3,7 +3,7 @@
  *
  * kba-create.ts
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2020-2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -20,6 +20,7 @@ import {
 const TEXT = {
   answerLabel: 'Answer',
   customLabel: 'Custom Question',
+  questionLabel: 'Select Question',
 };
 
 /**
@@ -78,7 +79,7 @@ class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
    * Creates all required DOM elements and returns the containing element.
    */
   public render = (): HTMLDivElement => {
-    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
+    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group mb-3`);
 
     // Only add the prompt to the first KBA question
     if (this.kbaIndex === 0) {
@@ -96,8 +97,9 @@ class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
     const selectedIndex = allOptions.indexOf(isCustomQuestion ? TEXT.customLabel : questionText);
 
     // Add the dropdown
-    const selectWrap = el<HTMLDivElement>('div', 'mb-1');
-    this.select = el<HTMLSelectElement>('select', 'form-control custom-select');
+    const selectWrap = el<HTMLDivElement>('div', 'mb-1 form-floating');
+    this.select = el<HTMLSelectElement>('select', 'form-select');
+    this.select.id = `fr-callback-${this.index}-question`;
     this.select.required = true;
     allOptions.forEach((x, i) => {
       const option = this.createOption(x, i === selectedIndex);
@@ -105,13 +107,21 @@ class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
     });
     this.select.addEventListener('change', this.onQuestionChange);
     selectWrap.appendChild(this.select);
+    const selectLabel = el<HTMLLabelElement>('label');
+    selectLabel.htmlFor = this.select.id;
+    selectLabel.innerHTML = TEXT.questionLabel;
+    selectWrap.appendChild(selectLabel);
     formGroup.appendChild(selectWrap);
 
     // Create the "custom question" input
-    this.customWrap = el<HTMLDivElement>('div', 'form-label-group fr-kba-custom-wrap mb-1 d-none');
+    this.customWrap = el<HTMLDivElement>(
+      'div',
+      'form-label-group form-floating fr-kba-custom-wrap mb-1 d-none',
+    );
     this.custom = el<HTMLInputElement>('input', 'form-control fr-kba-custom');
     this.custom.id = `fr-callback-${this.index}-custom`;
     this.custom.type = 'text';
+    this.custom.placeholder = TEXT.customLabel;
     this.custom.value = isCustomQuestion ? questionText : '';
     this.custom.addEventListener('keyup', this.onInput);
     this.customWrap.appendChild(this.custom);
@@ -122,7 +132,7 @@ class KbaCreateCallbackRenderer implements DestroyableCallbackRenderer, Focusabl
     formGroup.appendChild(this.customWrap);
 
     // Create an input for the answer
-    const answerWrap = el<HTMLDivElement>('div', 'form-label-group mb-0');
+    const answerWrap = el<HTMLDivElement>('div', 'form-label-group form-floating mb-0');
     this.answer = el<HTMLInputElement>('input', 'form-control fr-kba-answer');
     this.answer.id = `fr-callback-${this.index}-answer`;
     this.answer.placeholder = TEXT.answerLabel;

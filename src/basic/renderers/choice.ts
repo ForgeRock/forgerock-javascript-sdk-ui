@@ -3,7 +3,7 @@
  *
  * choice.ts
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2020-2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -53,20 +53,11 @@ class ChoiceCallbackRenderer implements DestroyableCallbackRenderer, FocusableCa
    */
   public render = (): HTMLDivElement => {
     const defaultIndex = this.callback.getInputValue() as number;
-    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
+    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group mb-3`);
     const id = `fr-callback-${this.index}`;
 
-    // Add the prompt
-    const prompt = this.callback.getPrompt();
-    if (prompt) {
-      const label = el<HTMLLabelElement>('label');
-      label.innerHTML = prompt;
-      label.htmlFor = id;
-      formGroup.appendChild(label);
-    }
-
     // Add the dropdown
-    this.input = el<HTMLSelectElement>('select', 'form-control');
+    this.input = el<HTMLSelectElement>('select', 'form-select');
     this.input.id = id;
     this.input.addEventListener('change', this.onInput);
     this.callback.getChoices().forEach((x, i) => {
@@ -77,6 +68,16 @@ class ChoiceCallbackRenderer implements DestroyableCallbackRenderer, FocusableCa
       this.input.appendChild(option);
     });
     formGroup.appendChild(this.input);
+
+    // Add the prompt
+    const prompt = this.callback.getPrompt();
+    if (prompt) {
+      formGroup.classList.add('form-floating');
+      const label = el<HTMLLabelElement>('label');
+      label.innerHTML = prompt;
+      label.htmlFor = id;
+      formGroup.appendChild(label);
+    }
 
     return formGroup;
   };

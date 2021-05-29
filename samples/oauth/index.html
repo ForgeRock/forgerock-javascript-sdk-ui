@@ -66,6 +66,7 @@
           baseUrl: '<Your AM URL>', // string; e.g. 'https://openam.example.com:9443/openam/'
           timeout: '<Your Timeout (milliseconds)>' // number; 90000 or less
         },
+        support: 'legacy', // string; e.g. 'legacy' (uses an iframe) or 'modern' (uses `fetch`)
         realmPath: realmPath || '<Your Realm>', // string; e.g. 'root'
         tree: tree || '<Your UsernamePassword Tree>', // string; e.g. 'Login'; update hrefs above too!
       });

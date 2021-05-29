@@ -43,10 +43,29 @@ module.exports = (env) => {
               },
             },
             {
+              // Run postcss actions
+              loader: 'postcss-loader',
+              options: {
+                // `postcssOptions` is needed for postcss 8.x;
+                // if you use postcss 7.x skip the key
+                postcssOptions: {
+                  // postcss plugins, can be exported to postcss.config.js
+                  plugins: [
+                    [
+                      'autoprefixer',
+                      {
+                        // Options
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+            {
               loader: 'sass-loader',
               options: {
                 sassOptions: {
-                  includePaths: ['node_modules/@forgerock/ui-design/src/scss'],
+                  includePaths: [],
                 },
               },
             },
