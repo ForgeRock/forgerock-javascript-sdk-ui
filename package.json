@@ -1,6 +1,6 @@
 {
   "name": "@forgerock/javascript-sdk-ui",
-  "version": "3.0.0-beta1",
+  "version": "3.0.0",
   "description": "ForgeRock JavaScript SDK with UI rendering capability",
   "main": "./lib/",
   "module": "./lib-esm/",
@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/ForgeRock/forgerock-javascript-sdk-ui#readme",
   "dependencies": {
-    "@forgerock/javascript-sdk": "^3.0.0-beta1"
+    "@forgerock/javascript-sdk": "^3.0.0"
   },
   "devDependencies": {
     "@types/expect-puppeteer": "^3.3.3",
@@ -60,7 +60,6 @@
     "autoprefixer": "^10.2.6",
     "bootstrap": "^5.0.1",
     "copyfiles": "^2.1.1",
-    "cpy-cli": "^3.1.1",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -71,7 +70,7 @@
     "jest-junit": "^12.0.0",
     "jest-puppeteer": "^4.4.0",
     "miragejs": "^0.1.32",
-    "node-sass": "^4.14.1",
+    "node-sass": "^6.0.1",
     "postcss": "^8.3.0",
     "postcss-loader": "^5.3.0",
     "prettier": "^2.0.5",
