@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const path = require('path');
+const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require('webpack');
 
 const banner = `
@@ -16,15 +17,15 @@ module.exports = (env) => {
   const isDev = env.DEV === 'yes';
 
   const plugins = [
-    new webpack.WatchIgnorePlugin([/css\.d\.ts$/, /bundles|docs|lib|lib\-esm|samples/]),
-    new webpack.BannerPlugin(banner),
+    new webpack.WatchIgnorePlugin({ paths: [/css\.d\.ts$/, /bundles|docs|lib|lib\-esm|samples/] }),
+    new webpack.BannerPlugin({ banner }),
     {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
           const cmds = [
-            'copyup ./bundles/index.js* ./samples/_static/js',
-            'copyup ./bundles/index.js* ./tests/e2e/site',
-            'copyup ./bundles/index.js* ./tests/e2e/app/_static/js',
+            'copyfiles -u 1 "./bundles/index.js*" ./samples/_static/js/',
+            'copyfiles -u 1 "./bundles/index.js*" ./tests/e2e/site/',
+            'copyfiles -u 1 "./bundles/index.js*" ./tests/e2e/app/_static/js/',
           ];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {
@@ -50,11 +51,8 @@ module.exports = (env) => {
       rules: [
         {
           test: /\.ts$/,
-          loader: 'awesome-typescript-loader',
+          use: 'ts-loader',
           exclude: /node_modules/,
-          query: {
-            declaration: false,
-          },
         },
         {
           test: /\.html$/,
@@ -64,6 +62,11 @@ module.exports = (env) => {
     },
     optimization: {
       minimize: false,
+      minimizer: [
+        new TerserPlugin({
+          extractComments: false,
+        }),
+      ],
     },
     output: {
       filename: 'index.js',

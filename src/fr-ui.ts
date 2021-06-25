@@ -9,6 +9,7 @@
  */
 
 import {
+  CallbackType,
   Dispatcher,
   ErrorCode,
   FRAuth,
@@ -21,6 +22,11 @@ import basicStepHandlerFactory from './basic';
 import { TARGET_ID } from './constants';
 import { FREventType } from './enums';
 import { FREndStep, FRUIOptions, FRUIStepHandler } from './interfaces';
+import { StringDict } from '@forgerock/javascript-sdk/lib/shared/interfaces';
+
+interface StepOptions extends ConfigOptions {
+  query: StringDict<string>;
+}
 
 /**
  * Orchestrates the flow through an authentication tree using `FRAuth`, generating
@@ -66,7 +72,7 @@ class FRUI extends Dispatcher {
    *
    * @param options Default configuration overrides
    */
-  public getSession = async (options?: ConfigOptions): Promise<FREndStep> => {
+  public getSession = async (options?: StepOptions): Promise<FREndStep> => {
     this.successfulStages = [];
     return this.nextStep(undefined, options);
   };
@@ -78,9 +84,15 @@ class FRUI extends Dispatcher {
     return this;
   };
 
-  private async nextStep(previousStep?: FRStep, options?: ConfigOptions): Promise<FREndStep> {
+  private async nextStep(previousStep?: FRStep, options?: StepOptions): Promise<FREndStep> {
+    let thisStep;
+
     try {
-      let thisStep = await FRAuth.next(previousStep, options);
+      if ((options?.query.code && options?.query.state) || options?.query.form_post_entry) {
+        thisStep = await FRAuth.resume(window.location.href, options);
+      } else {
+        thisStep = await FRAuth.next(previousStep, options);
+      }
 
       this.dispatchEvent({ step: thisStep, type: FREventType.StepChange });
 
@@ -108,6 +120,12 @@ class FRUI extends Dispatcher {
         default:
           if (previousStep) {
             this.successfulStages.push(previousStep);
+          }
+
+          const redirectCallbacks = thisStep.getCallbacksOfType(CallbackType.RedirectCallback);
+
+          if (redirectCallbacks.length > 0) {
+            return FRAuth.redirect(thisStep);
           }
 
           // Get a handler for this step and use it to complete the step

@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.0.0] - 2021-06-24
+
+### Added
+
+- Social Login support.
+
+### Fixed
+
+- Fixed build issue with Windows PowerShell
+
+### Breaking Changes
+
+- Removed `nonce` from export as it was removed from Core SDK
+- Upgraded to Twitter Bootstrap 5.0 and removed ForgeRock's UI Library
+- Markup for password and select components have changed; check your customizations for compatibility
+
 ## [2.2.0] - 2020-12-18
 
 ### Added

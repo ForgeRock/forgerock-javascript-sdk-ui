@@ -9,8 +9,8 @@ module.exports = (env) => {
       apply: (compiler) => {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
           const cmds = [
-            'cpy ./bundles/fr-ui.css ./samples/_static/css',
-            'cpy ./bundles/fr-ui.css ./tests/e2e/app/_static/css',
+            'copyfiles -u 1 "./bundles/fr-ui.css" ./samples/_static/css/',
+            'copyfiles -u 1 "./bundles/fr-ui.css" ./tests/e2e/app/_static/css',
           ];
           for (var cmd of cmds) {
             exec(cmd, (err, stdout, stderr) => {
@@ -43,10 +43,29 @@ module.exports = (env) => {
               },
             },
             {
+              // Run postcss actions
+              loader: 'postcss-loader',
+              options: {
+                // `postcssOptions` is needed for postcss 8.x;
+                // if you use postcss 7.x skip the key
+                postcssOptions: {
+                  // postcss plugins, can be exported to postcss.config.js
+                  plugins: [
+                    [
+                      'autoprefixer',
+                      {
+                        // Options
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+            {
               loader: 'sass-loader',
               options: {
                 sassOptions: {
-                  includePaths: ['node_modules/@forgerock/ui-design/src/scss'],
+                  includePaths: [],
                 },
               },
             },

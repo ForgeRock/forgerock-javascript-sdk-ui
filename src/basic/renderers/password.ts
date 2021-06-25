@@ -3,7 +3,7 @@
  *
  * password.ts
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2020-2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -24,7 +24,6 @@ import { renderErrors } from './errors';
 class PasswordCallbackRenderer implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
   private input!: HTMLInputElement;
   private toggle!: HTMLButtonElement;
-  private toggleIcon!: HTMLElement;
 
   /**
    * @param callback The callback to render
@@ -60,19 +59,18 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
    */
   public render = (): HTMLDivElement => {
     // Create the basic structure
-    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
-    const formLabelGroup = el<HTMLDivElement>('div', 'form-label-group form-label-group-password');
-    const formLabelGroupInput = el<HTMLDivElement>('div', 'form-label-group-input');
-    const formInputGroupAppend = el<HTMLDivElement>('div', 'input-group-append');
-    formLabelGroup.appendChild(formLabelGroupInput);
-    formLabelGroup.appendChild(formInputGroupAppend);
+    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group mb-3`);
+    const formLabelGroup = el<HTMLDivElement>(
+      'div',
+      'form-floating form-label-group input-group form-label-group-password',
+    );
     formGroup.appendChild(formLabelGroup);
 
     // Add the input
-    this.input = el<HTMLInputElement>('input', 'form-control');
+    this.input = el<HTMLInputElement>('input', 'form-control rounded-end input-password');
     this.input.id = `fr-callback-${this.index}`;
     this.input.addEventListener('keyup', this.onInput);
-    formLabelGroupInput.appendChild(this.input);
+    formLabelGroup.appendChild(this.input);
 
     // Add the prompt
     const prompt = this.callback.getPrompt();
@@ -81,16 +79,15 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
       const label = el<HTMLLabelElement>('label');
       label.innerHTML = prompt;
       label.htmlFor = this.input.id;
-      formLabelGroupInput.appendChild(label);
+      formLabelGroup.appendChild(label);
     }
 
     // Add the view/hide toggle
-    this.toggle = el<HTMLButtonElement>('button', 'btn btn-outline-secondary');
+    this.toggle = el<HTMLButtonElement>('button', 'toggle-password');
     this.toggle.type = 'button';
+    this.toggle.setAttribute('aria-label', 'Display password in plain text.');
     this.toggle.addEventListener('click', this.toggleView);
-    this.toggleIcon = el<HTMLElement>('i', 'material-icons material-icons-outlined');
-    this.toggle.appendChild(this.toggleIcon);
-    formInputGroupAppend.appendChild(this.toggle);
+    formLabelGroup.appendChild(this.toggle);
 
     // Add policy errors
     const errorList = renderErrors(this.callback.getFailedPolicies(), prompt);
@@ -105,7 +102,6 @@ class PasswordCallbackRenderer implements DestroyableCallbackRenderer, Focusable
 
   private setView = (showPassword: boolean): void => {
     this.input.type = showPassword ? 'text' : 'password';
-    this.toggleIcon.innerHTML = showPassword ? 'visibility_off' : 'visibility';
   };
 
   private toggleView = (): void => {

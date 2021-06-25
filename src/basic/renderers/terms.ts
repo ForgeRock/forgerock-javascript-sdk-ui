@@ -3,7 +3,7 @@
  *
  * terms.ts
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2020-2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -21,7 +21,8 @@ import {
  * that indicates agreement.
  */
 class TermsAndConditionsCallbackRenderer
-  implements DestroyableCallbackRenderer, FocusableCallbackRenderer {
+  implements DestroyableCallbackRenderer, FocusableCallbackRenderer
+{
   private input!: HTMLInputElement;
 
   /**
@@ -54,7 +55,7 @@ class TermsAndConditionsCallbackRenderer
    * Creates all required DOM elements and returns the containing element.
    */
   public render = (): HTMLDivElement => {
-    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group`);
+    const formGroup = el<HTMLDivElement>('div', `fr-callback-${this.index} form-group mb-3`);
 
     // Add the terms
     const p = el<HTMLParagraphElement>('p');

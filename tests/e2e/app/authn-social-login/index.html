@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ForgeRock JavaScript SDK UI Test App</title>
+
+  <!-- Needed only for automation with mock server -->
+  <meta name="referrer" content="unsafe-url">
+
+  <link rel="shortcut icon" href="../_static/img/fr-ico.png" type="image/png">
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Material+Icons">
+  <link rel="stylesheet" type="text/css" href="../_static/css/fr-ui.css">
+  <style>
+    body {
+      padding: 2rem;
+    }
+    .links {
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="fr-ui">Loading...</div>
+
+  <script src="../_static/js/index.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+  <script>
+    async function login() {
+      const targetId = 'fr-ui';
+      const target = document.getElementById(targetId);
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get('code');
+      const form_post_entry = url.searchParams.get('form_post_entry');
+      const un = url.searchParams.get('un') || '57a5b4e4-6999-4b45-bf86-a4f2e5d4b629';
+      const pw = url.searchParams.get('pw') || 'ieH034K&-zlwqh3V_';
+      const state = url.searchParams.get('state');
+
+      // Use `let` to override if we are returning from redirect
+      let amUrl = url.searchParams.get('amUrl') || 'https://auth.example.com:9443/am';
+      let realmPath = url.searchParams.get('realmPath') || 'root';
+      let tree = url.searchParams.get('tree') || 'IDMSocialLogin';
+
+      let options;
+      if ((code && state) || form_post_entry) {
+        // Below six lines for return params are needed for automation only
+        const returnParamsString = window.localStorage.getItem('returnParams');
+        window.localStorage.removeItem('returnParams');
+        const returnParams = JSON.parse(returnParamsString);
+        amUrl = returnParams.amUrl;
+        realmPath = returnParams.realmPath;
+        tree = returnParams.tree;
+
+        // Create options object to pass code and state to AM
+        options = {
+          query: {
+            ...(code && { code }),
+            ...(state && { state }),
+            ...(form_post_entry && { form_post_entry }),
+          }
+        };
+      } else {
+        // These return params are needed for just this test automation
+        const returnParams = {
+          amUrl,
+          realmPath,
+          tree,
+        };
+        window.localStorage.setItem('returnParams', JSON.stringify(returnParams));
+      }
+
+      forgerock.Config.set({
+        serverConfig: {
+          baseUrl: amUrl,
+        },
+        realmPath,
+        tree,
+      });
+
+      const frui = new forgerock.FRUI();
+
+      const result = await frui.getSession(options);
+
+      if (result.type === 'LoginSuccess') {
+        target.innerHTML = `Success:<br/>${result.getSessionToken()}<br/><br/>Logging out in 3 seconds...`;
+        setTimeout(async () => {
+          await forgerock.SessionManager.logout();
+
+          // Recreate fresh URL in case of additional parameters added from redirects
+          const newUrl = new URL(window.location.origin + window.location.pathname);
+          // Only recreate search parameters if they originally existed
+          amUrl && newUrl.searchParams.set('amUrl', amUrl);
+          realmPath && newUrl.searchParams.set('realmPath', realmPath);
+          tree && newUrl.searchParams.set('tree', tree);
+          // "Refresh" the page, but with clean URL params
+          window.location.assign(newUrl);
+        }, 3000);
+      } else {
+        target.innerHTML = `Failure: ${result.getMessage()}`;
+      }
+    }
+
+    window.addEventListener('load', login);
+  </script>
+</body>
+</html>
